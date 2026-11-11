@@ -1,0 +1,206 @@
+<!DOCTYPE html>
+<html lang="tr">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1, viewport-fit=cover">
+<title>Algoritma ve Akış Şeması Macerası</title>
+<style>
+:root{
+  --bg1:#0f172a; --bg2:#1e293b; --accent:#22d3ee; --accent2:#a78bfa;
+  --good:#34d399; --bad:#f87171; --text:#e2e8f0; --muted:#94a3b8;
+  --card:#1e293b; --border:#334155;
+  padding-top: env(safe-area-inset-top,0px);
+  padding-bottom: env(safe-area-inset-bottom,0px);
+}
+*{box-sizing:border-box;}
+html{scroll-padding-top: env(safe-area-inset-top,0px); height:100%;}
+body{
+  margin:0; min-height:100%; font-family:'Segoe UI',system-ui,sans-serif;
+  background:radial-gradient(circle at 20% 0%,#1e293b,#0f172a 60%);
+  color:var(--text); display:flex; justify-content:center;
+}
+#app{width:100%; max-width:640px; padding:20px 16px 40px; min-height:100%;}
+h1{font-size:1.5rem; margin:.2em 0; text-align:center; background:linear-gradient(90deg,var(--accent),var(--accent2)); -webkit-background-clip:text; background-clip:text; color:transparent;}
+.sub{text-align:center; color:var(--muted); margin-bottom:1.2em; font-size:.9rem;}
+.card{background:var(--card); border:1px solid var(--border); border-radius:16px; padding:20px; box-shadow:0 8px 24px rgba(0,0,0,.35);}
+.center{text-align:center;}
+button{
+  font-family:inherit; cursor:pointer; border:none; border-radius:10px;
+  padding:12px 20px; font-size:1rem; font-weight:600; transition:transform .12s, opacity .12s;
+}
+button:active{transform:scale(.96);}
+.btn-primary{background:linear-gradient(90deg,var(--accent),var(--accent2)); color:#0f172a;}
+.topbar{display:flex; justify-content:space-between; align-items:center; margin-bottom:12px; font-size:.9rem; color:var(--muted);}
+.progress-wrap{height:8px; background:#334155; border-radius:6px; overflow:hidden; margin-bottom:18px;}
+.progress-bar{height:100%; background:linear-gradient(90deg,var(--accent),var(--accent2)); transition:width .3s;}
+.level-tag{display:inline-block; font-size:.75rem; color:var(--accent); background:rgba(34,211,238,.12); padding:2px 10px; border-radius:20px; margin-bottom:10px;}
+.question{font-size:1.1rem; margin:8px 0 18px; line-height:1.5;}
+.options{display:flex; flex-direction:column; gap:10px;}
+.opt{background:#0f172a; border:1px solid var(--border); color:var(--text); text-align:left; padding:14px 16px; border-radius:12px; font-size:.98rem;}
+.opt:hover{border-color:var(--accent);}
+.opt.correct{background:rgba(52,211,153,.18); border-color:var(--good);}
+.opt.wrong{background:rgba(248,113,113,.18); border-color:var(--bad);}
+.opt:disabled{cursor:default;}
+.explain{margin-top:14px; padding:12px 14px; border-radius:10px; background:#0f172a; border:1px solid var(--border); font-size:.9rem; color:var(--muted); display:none;}
+.hearts{font-size:1.1rem; letter-spacing:2px;}
+.start-hero{text-align:center; padding:10px 0 6px;}
+.start-hero .emoji{font-size:3rem;}
+ul.topics{text-align:left; margin:16px auto; max-width:420px; color:var(--muted); font-size:.92rem; line-height:1.7;}
+.result-score{font-size:2.6rem; font-weight:800; text-align:center; background:linear-gradient(90deg,var(--accent),var(--accent2)); -webkit-background-clip:text; background-clip:text; color:transparent; margin:6px 0;}
+.result-msg{text-align:center; color:var(--muted); margin-bottom:20px;}
+.actions-row{display:flex; gap:10px; justify-content:center; flex-wrap:wrap;}
+</style>
+</head>
+<body>
+<div id="app"></div>
+
+<script>
+const QUESTIONS = [
+ {topic:"Algoritma", q:"Bir problemi çözmek için izlenen, sıralı ve mantıklı adımlar dizisine ne denir?", opts:["Algoritma","Değişken","Döngü","Fonksiyon"], correct:0, explain:"Algoritma, bir problemi çözmek için izlenen adım adım işlem sırasıdır."},
+ {topic:"Algoritma", q:"İyi bir algoritmanın özelliklerinden biri DEĞİLDİR:", opts:["Anlaşılır olması","Sonlu adımlardan oluşması","Belirsiz ifadeler içermesi","Girdi-çıktı ilişkisinin net olması"], correct:2, explain:"İyi bir algoritma kesin ve belirli adımlardan oluşmalıdır, belirsizlik içermemelidir."},
+ {topic:"Algoritma", q:"Bir algoritmanın mutlaka sonlu sayıda adımdan oluşması ve bir noktada sona ermesi gerekir. Bu özelliğe ne denir?", opts:["Kesinlik","Sonluluk","Girdi","Çıktı"], correct:1, explain:"Sonluluk, algoritmanın sonsuza kadar sürmeyip belirli bir adımda bitmesi gerektiği anlamına gelir."},
+ {topic:"Algoritma", q:"Aşağıdakilerden hangisi bir algoritmayı ifade etme yöntemlerinden biri DEĞİLDİR?", opts:["Sözde kod (pseudocode)","Akış şeması","Doğal dil ile anlatım","Renk paleti"], correct:3, explain:"Algoritmalar sözde kod, akış şeması veya doğal dil ile ifade edilebilir; renk paleti bir algoritma gösterim yöntemi değildir."},
+ {topic:"Algoritma", q:"Bir kek tarifi de aslında bir örnektir; çünkü tarifte sıralı ve belirli adımlar vardır. Bu örnek neyi anlatır?", opts:["Döngüyü","Algoritmayı","Değişkeni","Veri tabanını"], correct:1, explain:"Sıralı, belirli adımlardan oluşan her işlem günlük hayatta bir algoritma örneğidir."},
+ {topic:"Algoritma", q:"Algoritmada 'girdi (input)' ne anlama gelir?", opts:["Algoritmanın ürettiği sonuç","Algoritmaya dışarıdan verilen veri","Algoritmanın adım sayısı","Algoritmanın çalışma süresi"], correct:1, explain:"Girdi, algoritmanın işlem yapabilmesi için dışarıdan aldığı veridir."},
+ {topic:"Akış Şeması", q:"Akış şemasında karar (if) yapısını hangi sembol temsil eder?", opts:["Dikdörtgen","Oval","Eşkenar dörtgen (baklava)","Paralelkenar"], correct:2, explain:"Karar yapıları akış şemasında eşkenar dörtgen (baklava dilimi) şekli ile gösterilir."},
+ {topic:"Akış Şeması", q:"Akış şemasında başlama/bitiş noktası hangi şekille gösterilir?", opts:["Oval","Dikdörtgen","Üçgen","Altıgen"], correct:0, explain:"Başlama ve bitiş noktaları oval (terminal) sembolüyle gösterilir."},
+ {topic:"Akış Şeması", q:"Akış şemasında işlem (hesaplama, atama) adımları hangi şekille gösterilir?", opts:["Oval","Dikdörtgen","Baklava dilimi","Paralelkenar"], correct:1, explain:"İşlem adımları (hesaplama, atama vb.) dikdörtgen sembolüyle gösterilir."},
+ {topic:"Akış Şeması", q:"Akış şemasında veri girişi/çıkışı (giriş-çıkış) hangi şekille gösterilir?", opts:["Oval","Dikdörtgen","Paralelkenar","Daire"], correct:2, explain:"Giriş/çıkış işlemleri (örneğin klavyeden veri okuma, ekrana yazdırma) paralelkenar sembolüyle gösterilir."},
+ {topic:"Akış Şeması", q:"Akış şemasında oklar neyi belirtir?", opts:["Değişken adlarını","İşlem sırasını / akış yönünü","Veri tipini","Hata mesajlarını"], correct:1, explain:"Oklar, akış şemasındaki adımların hangi sırayla ve hangi yönde takip edileceğini gösterir."},
+ {topic:"Akış Şeması", q:"Bir sayının çift mi tek mi olduğunu kontrol eden bir akış şemasında hangi sembol mutlaka kullanılır?", opts:["Sadece oval","Sadece dikdörtgen","Eşkenar dörtgen (karar)","Sadece paralelkenar"], correct:2, explain:"Çift/tek kontrolü bir koşul (karar) gerektirdiği için eşkenar dörtgen (karar sembolü) kullanılır."},
+];
+
+function shuffle(arr){
+  const a=[...arr];
+  for(let i=a.length-1;i>0;i--){const j=Math.floor(Math.random()*(i+1)); [a[i],a[j]]=[a[j],a[i]];}
+  return a;
+}
+
+const state = { screen:"start", order:[], idx:0, score:0, lives:3, answered:false };
+
+function startGame(){
+  state.order = shuffle(QUESTIONS);
+  state.idx = 0;
+  state.score = 0;
+  state.lives = 3;
+  state.answered = false;
+  state.screen = "quiz";
+  render();
+}
+
+function heartsHtml(){
+  let h="";
+  for(let i=0;i<3;i++) h += i < state.lives ? "❤️" : "🖤";
+  return h;
+}
+
+function selectOption(i){
+  if(state.answered) return;
+  state.answered = true;
+  const q = state.order[state.idx];
+  const correct = i === q.correct;
+  if(correct){ state.score += 10; } else { state.lives -= 1; }
+  render(i, correct);
+  setTimeout(()=>{
+    if(state.lives <= 0){ state.screen = "gameover"; render(); return; }
+    state.idx += 1;
+    if(state.idx >= state.order.length){ state.screen = "finish"; render(); return; }
+    state.answered = false;
+    render();
+  }, 1400);
+}
+
+function render(selectedIdx, wasCorrect){
+  const app = document.getElementById("app");
+
+  if(state.screen === "start"){
+    app.innerHTML = `
+      <h1>🧭 Algoritma ve Akış Şeması Macerası</h1>
+      <p class="sub">9. Sınıf Bilişim Teknolojileri · Programlamaya Giriş</p>
+      <div class="card">
+        <div class="start-hero"><div class="emoji">🗺️</div></div>
+        <p style="text-align:center; color:var(--muted)">Algoritmanın ne olduğunu ve akış şeması sembollerini ne kadar iyi biliyorsun?</p>
+        <ul class="topics">
+          <li>🔹 Algoritma nedir, özellikleri</li>
+          <li>🔹 Algoritma ifade etme yöntemleri</li>
+          <li>🔹 Akış şeması sembolleri (başla/bitir, işlem, karar, giriş-çıkış)</li>
+          <li>🔹 Akış şemasında ok ve yönlerin anlamı</li>
+        </ul>
+        <p style="text-align:center; color:var(--muted); font-size:.85rem;">3 canın var — 3 yanlış cevapta oyun biter. Doğru cevap = 10 puan.</p>
+        <div class="center" style="margin-top:14px;">
+          <button class="btn-primary" onclick="startGame()">Oyuna Başla</button>
+        </div>
+      </div>
+    `;
+    return;
+  }
+
+  if(state.screen === "quiz"){
+    const q = state.order[state.idx];
+    const pct = Math.round((state.idx / state.order.length) * 100);
+    let optsHtml = q.opts.map((opt,i)=>{
+      let cls = "opt";
+      let disabled = state.answered ? "disabled" : "";
+      if(state.answered && selectedIdx !== undefined){
+        if(i === q.correct) cls += " correct";
+        else if(i === selectedIdx) cls += " wrong";
+      }
+      return `<button class="${cls}" ${disabled} onclick="selectOption(${i})">${opt}</button>`;
+    }).join("");
+
+    app.innerHTML = `
+      <div class="topbar">
+        <span>Soru ${state.idx+1} / ${state.order.length}</span>
+        <span class="hearts">${heartsHtml()}</span>
+        <span>⭐ ${state.score}</span>
+      </div>
+      <div class="progress-wrap"><div class="progress-bar" style="width:${pct}%"></div></div>
+      <div class="card">
+        <span class="level-tag">${q.topic}</span>
+        <div class="question">${q.q}</div>
+        <div class="options">${optsHtml}</div>
+        <div class="explain" style="${state.answered ? 'display:block' : ''}">
+          ${state.answered ? (wasCorrect ? "✅ Doğru! " : "❌ Yanlış. ") + q.explain : ""}
+        </div>
+      </div>
+    `;
+    return;
+  }
+
+  if(state.screen === "gameover"){
+    app.innerHTML = `
+      <h1>💥 Oyun Bitti</h1>
+      <div class="card">
+        <div class="result-score">${state.score} Puan</div>
+        <p class="result-msg">Canların tükendi. Tekrar dene, akış şeması sembollerinde ustalaş!</p>
+        <div class="actions-row">
+          <button class="btn-primary" onclick="startGame()">Tekrar Oyna</button>
+        </div>
+      </div>
+    `;
+    return;
+  }
+
+  if(state.screen === "finish"){
+    const total = state.order.length * 10;
+    let msg = "Harika bir başlangıç! Konuları tekrar gözden geçir.";
+    if(state.score >= total*0.8) msg = "Mükemmel! Algoritma ve akış şemasında ustasın! 🏆";
+    else if(state.score >= total*0.5) msg = "Gayet iyi! Biraz daha pratikle harika olacaksın. 💪";
+    app.innerHTML = `
+      <h1>🎉 Tebrikler!</h1>
+      <div class="card">
+        <div class="result-score">${state.score} / ${total}</div>
+        <p class="result-msg">${msg}</p>
+        <div class="actions-row">
+          <button class="btn-primary" onclick="startGame()">Tekrar Oyna</button>
+        </div>
+      </div>
+    `;
+    return;
+  }
+}
+
+render();
+</script>
+</body>
+</html>
