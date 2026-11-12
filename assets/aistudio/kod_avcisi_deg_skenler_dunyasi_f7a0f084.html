@@ -1,0 +1,105 @@
+<!DOCTYPE html>
+<html lang="tr">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>Kod Avcısı: Değişkenler Dünyası</title>
+<style>
+:root{--navy:#101936;--panel:#1b2850;--panel2:#24345f;--cyan:#55e6e0;--yellow:#ffd166;--pink:#ff719a;--green:#65e6a5;--white:#f5f7ff;--muted:#b8c5e8}
+*{box-sizing:border-box}body{margin:0;min-height:100vh;background:radial-gradient(circle at 15% 10%,#263c72 0,transparent 32%),radial-gradient(circle at 90% 80%,#34245f 0,transparent 30%),var(--navy);color:var(--white);font-family:system-ui,-apple-system,Segoe UI,sans-serif}
+button,input{font:inherit}button{cursor:pointer;border:0;border-radius:13px;padding:12px 18px;font-weight:800;color:var(--navy);background:var(--cyan);box-shadow:0 4px 0 #239e9b;transition:.15s}button:hover{transform:translateY(-2px);filter:brightness(1.06)}button:active{transform:translateY(2px);box-shadow:none}button.secondary{background:#dce5ff;box-shadow:0 4px 0 #9aaddb}button.gold{background:var(--yellow);box-shadow:0 4px 0 #c18b2e}button.pink{background:var(--pink);box-shadow:0 4px 0 #b8416a}
+.wrap{max-width:1000px;margin:auto;padding:24px 18px 50px}.top{display:flex;align-items:center;justify-content:space-between;gap:12px;margin-bottom:20px}.brand{font-weight:1000;letter-spacing:1px;font-size:clamp(18px,3vw,25px)}.brand span{color:var(--cyan)}.stats{display:flex;gap:8px;flex-wrap:wrap}.pill{background:#ffffff14;border:1px solid #ffffff24;border-radius:30px;padding:8px 13px;font-weight:800;font-size:14px}.card{background:linear-gradient(145deg,#1d2c56,#172344);border:1px solid #ffffff20;border-radius:24px;padding:clamp(20px,4vw,36px);box-shadow:0 18px 45px #0004}.hero{text-align:center;padding:46px 20px}.hero .mascot{font-size:76px;filter:drop-shadow(0 8px 0 #0003)}h1{font-size:clamp(30px,6vw,52px);margin:8px 0;color:var(--yellow);line-height:1.1}h2{margin:0 0 12px;font-size:clamp(23px,4vw,32px)}p{color:var(--muted);line-height:1.65}.hero p{max-width:650px;margin:12px auto 24px;font-size:17px}.field{display:flex;gap:10px;max-width:440px;margin:22px auto 0}.field input{flex:1;min-width:0;background:#0d1732;border:1px solid #6175a8;border-radius:13px;padding:13px 15px;color:white;outline:none}.field input:focus{border-color:var(--cyan)}.hidden{display:none!important}.progressrow{display:flex;justify-content:space-between;gap:12px;color:var(--muted);font-size:14px;font-weight:700;margin:18px 0 8px}.bar{height:11px;background:#0d1732;border-radius:20px;overflow:hidden}.bar>div{height:100%;width:0;background:linear-gradient(90deg,var(--cyan),var(--green));transition:width .3s}.sectionhead{display:flex;align-items:center;gap:14px;margin-bottom:20px}.sectionicon{font-size:38px;background:#ffffff12;border-radius:17px;padding:10px}.tag{font-size:12px;color:var(--cyan);font-weight:900;letter-spacing:1.3px;text-transform:uppercase}.question{font-size:22px;font-weight:850;margin:20px 0}.code{font-family:ui-monospace,Consolas,monospace;background:#0a132b;border:1px solid #3c4d7a;border-radius:14px;padding:17px;color:#9cf4d5;font-size:clamp(16px,3vw,21px);overflow-wrap:anywhere;margin:16px 0}.options{display:grid;grid-template-columns:repeat(2,minmax(0,1fr));gap:12px;margin:18px 0}.option{background:#26365f;border:2px solid #425580;color:white;box-shadow:none;text-align:left;padding:16px;border-radius:14px}.option.selected{border-color:var(--cyan);background:#24515c}.option.correct{border-color:var(--green);background:#1c5949}.option.wrong{border-color:var(--pink);background:#63324b}.feedback{padding:13px 16px;border-radius:13px;margin:14px 0;font-weight:700;line-height:1.5}.feedback.good{background:#65e6a51c;color:#8cf2bd;border:1px solid #65e6a566}.feedback.bad{background:#ff719a1c;color:#ff9db8;border:1px solid #ff719a66}.actions{display:flex;justify-content:space-between;gap:12px;flex-wrap:wrap;margin-top:20px}.small{font-size:13px;color:var(--muted)}.choices{display:flex;flex-wrap:wrap;gap:10px;margin:16px 0}.choicechip{background:#26365f;color:white;border:1px solid #536994;box-shadow:none}.choicechip.active{outline:3px solid var(--yellow)}.dropzone{border:2px dashed #7287b7;border-radius:15px;padding:16px;min-height:62px;margin:10px 0;background:#0e1933}.dropzone.over{border-color:var(--cyan);background:#1d4650}.matchgrid{display:grid;grid-template-columns:1fr 1fr;gap:12px}.matchitem{padding:13px;background:#26365f;border:1px solid #536994;border-radius:13px;cursor:grab;text-align:center;font-weight:800}.matchitem:focus{outline:2px solid var(--yellow)}.matchitem.used{opacity:.35;pointer-events:none}.scorebig{font-size:54px;font-weight:1000;color:var(--yellow)}.badge{display:inline-block;padding:8px 13px;border-radius:30px;background:#ffd16620;color:var(--yellow);border:1px solid #ffd16666;font-weight:900;margin:5px}.levelgrid{display:grid;grid-template-columns:repeat(2,1fr);gap:12px;margin-top:22px}.level{padding:17px;border-radius:16px;background:#ffffff0b;border:1px solid #ffffff22;text-align:left;color:white;box-shadow:none}.level b{display:block;margin-bottom:5px}.level small{color:var(--muted)}.level.done{border-color:var(--green)}.level.locked{opacity:.45;cursor:not-allowed}.footer{text-align:center;color:#8495bd;font-size:12px;margin-top:22px}
+@media(max-width:600px){.top{align-items:flex-start;flex-direction:column}.options,.levelgrid{grid-template-columns:1fr}.field{flex-direction:column}.matchgrid{grid-template-columns:1fr}.actions button{flex:1}}
+</style>
+</head>
+<body>
+<div class="wrap">
+  <header class="top">
+    <div class="brand">🧭 KOD <span>AVCISI</span></div>
+    <div class="stats"><div class="pill">⭐ Puan: <span id="score">0</span></div><div class="pill">🔥 Seri: <span id="streak">0</span></div><div class="pill">👤 <span id="playerLabel">Kodcu</span></div></div>
+  </header>
+  <main>
+    <section id="welcome" class="card hero">
+      <div class="mascot">🧑‍🚀</div><div class="tag">9. Sınıf · Programlama Temelleri</div>
+      <h1>Kod Avcısı</h1><h2>Değişkenler Dünyası</h2>
+      <p>Kodlar Diyarı'nda işler karıştı! Değişken türlerini keşfet, hatalı isimleri yakala ve Kod Canavarı'nı yenerek dünyayı kurtar.</p>
+      <div class="field"><input id="playerName" maxlength="18" placeholder="Kodcu adını yaz..." aria-label="Oyuncu adı"><button onclick="startGame()">Maceraya Başla 🚀</button></div>
+      <p class="small">İnternet gerekmez · Tek dosya · Yaklaşık 10–15 dakika</p>
+    </section>
+
+    <section id="map" class="card hidden">
+      <div class="tag">Görev haritası</div><h2>Merhaba <span id="helloName"></span>! 👋</h2>
+      <p>Kodlar Diyarı'nın dört bölgesini tamamla. Her doğru cevap puan kazandırır. Üç doğru cevabı arka arkaya verirsen bonus alırsın.</p>
+      <div class="levelgrid" id="levelGrid"></div>
+      <div class="actions"><button class="secondary" onclick="resetGame()">Oyunu Sıfırla</button></div>
+    </section>
+
+    <section id="game" class="card hidden">
+      <div class="sectionhead"><div class="sectionicon" id="sectionIcon">🧪</div><div><div class="tag" id="sectionTag">BÖLÜM 1</div><h2 id="sectionTitle">Değişken Laboratuvarı</h2></div></div>
+      <div class="progressrow"><span id="questionCount">Görev 1 / 5</span><span id="progressText">İlerleme %0</span></div><div class="bar"><div id="progressBar"></div></div>
+      <div id="taskArea"></div>
+      <div id="feedback" class="hidden"></div>
+      <div class="actions"><button class="secondary" onclick="backToMap()">Haritaya Dön</button><button id="checkBtn" onclick="checkAnswer()">Cevabı Kontrol Et</button><button id="nextBtn" class="gold hidden" onclick="nextQuestion()">Sonraki Görev ➜</button></div>
+    </section>
+
+    <section id="result" class="card hero hidden">
+      <div class="mascot" id="resultIcon">🏆</div><div class="tag">Görev tamamlandı</div><h1 id="resultTitle">Harika iş!</h1><p id="resultText"></p><div class="scorebig" id="resultScore">0</div><p>Bu bölümde kazandığın puan</p><div id="resultBadge"></div>
+      <div class="actions" style="justify-content:center"><button onclick="backToMap()">Haritaya Dön</button></div>
+    </section>
+
+    <section id="final" class="card hero hidden">
+      <div class="mascot">🏅</div><div class="tag">Kodlar Diyarı kurtarıldı</div><h1>Altın Kodcu!</h1><p id="finalText"></p><div class="scorebig" id="finalScore"></div><p id="finalPercent"></p><div class="badge">🥇 ALTIN KODCU ROZETİ</div><div class="actions" style="justify-content:center"><button onclick="resetGame()">Yeniden Oyna</button><button class="secondary" onclick="window.print()">Sonucu Yazdır</button></div>
+    </section>
+  </main>
+  <div class="footer">KOD AVCISI · Öğren, dene, keşfet! | C# değişken tanımlama örnekleri</div>
+</div>
+<script>
+const sections=[
+ {title:"Değişken Laboratuvarı",icon:"🧪",desc:"Veri türlerini tanı",questions:[
+  {q:"25 sayısını saklamak için hangi veri türü uygundur?",code:"int yas = 25;",opts:["string","int","char","bool"],a:1,why:"int, tam sayıları saklamak için kullanılır."},
+  {q:"3.14 gibi ondalıklı bir sayı için hangi tür kullanılabilir?",code:"float sicaklik = 3.14f;",opts:["bool","char","float","string"],a:2,why:"float, ondalıklı sayıları saklar. C# dilinde float değerinin sonuna f eklenir."},
+  {q:"Bir öğrencinin adını saklamak için hangisi uygundur?",code:'string ad = "Ece";',opts:["int","string","double","bool"],a:1,why:"string, bir metni yani karakter dizisini saklar."},
+  {q:"Tek bir karakteri saklamak için hangi tür kullanılır?",code:"char harf = 'A';",opts:["char","string","int","float"],a:0,why:"char tek bir karakter saklar ve değer tek tırnakla yazılır."},
+  {q:"Bir kapının açık/kapalı bilgisini tutmak için hangisi uygundur?",code:"bool kapiAcik = true;",opts:["double","string","bool","char"],a:2,why:"bool yalnızca true (doğru) veya false (yanlış) değerini alır."}
+ ]},
+ {title:"Değişken İsmi Dedektifi",icon:"🔎",desc:"Kurallara uygun isimleri bul",questions:[
+  {q:"Hangisi geçerli bir değişken ismidir?",code:"",opts:["1sayi","ogrenciAdi","öğrenci adi","int"],a:1,why:"Değişken ismi rakamla başlayamaz, boşluk içeremez ve int gibi ayrılmış anahtar kelime olamaz."},
+  {q:"Hangisi değişken ismi olarak kullanılamaz?",code:"",opts:["sayi1","_toplam","notOrtalamasi","2not"],a:3,why:"Değişken isimleri rakamla başlayamaz. 2not bu nedenle geçersizdir."},
+  {q:"C# dilinde aşağıdakilerden hangisi anahtar kelimedir?",code:"",opts:["puanim","renk","while","ogrenciNo"],a:2,why:"while, C# dilinde ayrılmış bir anahtar kelimedir; değişken adı olarak kullanılamaz."},
+  {q:"Hangisi değişken isimlendirme kurallarına uygundur?",code:"",opts:["sinav notu","_sinavNotu","sinav-notu","3sinav"],a:1,why:"Alt çizgi ile başlayan isim kullanılabilir. Boşluk, tire ve rakamla başlama uygun değildir."},
+  {q:"C# dilinde BuyukHarf ve buyukHarf isimleri için hangisi doğrudur?",code:"",opts:["Aynı değişkendir","Büyük/küçük harf duyarlılığı vardır","İkisi de geçersizdir","Sadece ilki geçerlidir"],a:1,why:"C# büyük ve küçük harfleri farklı kabul eder. BuyukHarf ile buyukHarf farklı isimlerdir."}
+ ]},
+ {title:"Türünü Bul!",icon:"🎯",desc:"Veriye uygun türü seç",questions:[
+  {q:"Öğrenci sayısı: 32",code:"32",opts:["int","string","bool","char"],a:0,why:"32 tam sayıdır; int uygundur."},
+  {q:"Ürün fiyatı: 19.95",code:"19.95",opts:["char","double","bool","int"],a:1,why:"Ondalıklı ve hassas bir değer için double kullanılabilir."},
+  {q:"Sınıfın şubesi: 'B'",code:"'B'",opts:["string","int","char","bool"],a:2,why:"Tek karakter olduğu için char uygundur."},
+  {q:"Sınavı geçti mi?: false",code:"false",opts:["float","bool","string","double"],a:1,why:"true/false türündeki mantıksal değerler bool ile tutulur."},
+  {q:"Şehir adı: \"İzmir\"",code:'"İzmir"',opts:["int","char","string","bool"],a:2,why:"Birden fazla karakterden oluşan metinler string türündedir."}
+ ]},
+ {title:"Kod Canavarı",icon:"👾",desc:"Hatalı tanımlamaları düzelt",questions:[
+  {q:"Bu tanımlamadaki hatayı bul: Tam sayı değişkeni nasıl doğru yazılır?",code:"int 1yas = 15;",opts:["int yas = 15;","1yas int = 15;","string yas = 15;","int yas 15;"],a:0,why:"Değişken adı rakamla başlayamaz. int yas = 15; doğru tanımlamadır."},
+  {q:"Metin değerinin doğru yazıldığı satırı seç.",code:'string mesaj = Merhaba;',opts:['string mesaj = "Merhaba";','string mesaj = \'Merhaba\';','int mesaj = "Merhaba";','char mesaj = "Merhaba";'],a:0,why:"string metinleri çift tırnak içinde yazılır."},
+  {q:"Tek karakter tanımlamasını düzelt.",code:'char harf = "K";',opts:['char harf = \'K\';','string harf = \'K\';','char harf = "KK";','int harf = \'K\';'],a:0,why:"char tek karakteri tek tırnak içinde tutar: 'K'."},
+  {q:"Aşağıdaki satırlardan hangisi doğru bir bool tanımlamasıdır?",code:"bool devam = evet;",opts:["bool devam = true;","bool devam = \"true\";","int devam = false;","bool devam = 1;"],a:0,why:"bool değişkenine true veya false atanır; bunlar tırnaksız yazılır."},
+  {q:"Kod Canavarı'nın son kalkanını kır! Hangi satır doğrudur?",code:"",opts:["double ortalama = 72.5;","int ortalama = 72.5;","float ortalama = \"72.5\";","char ortalama = '72';"],a:0,why:"72.5 ondalıklı bir sayıdır. double ile doğru şekilde saklanabilir."}
+ ]}
+];
+let player="Kodcu",score=0,streak=0,sectionIndex=0,qIndex=0,selected=null,answered=false,sectionStart=0,completed=[false,false,false,false],earned=[0,0,0,0],totalCorrect=0,totalQuestions=20;
+const $=id=>document.getElementById(id);
+function show(id){["welcome","map","game","result","final"].forEach(x=>$(x).classList.toggle("hidden",x!==id))}
+function updateStats(){$("score").textContent=score;$("streak").textContent=streak;$("playerLabel").textContent=player}
+function startGame(){player=$("playerName").value.trim()||"Kodcu";$("playerLabel").textContent=player;$("helloName").textContent=player;show("map");renderMap()}
+function renderMap(){$("levelGrid").innerHTML=sections.map((s,i)=>`<button class="level ${completed[i]?"done":""}" ${i>0&&!completed[i-1]?"disabled":""} onclick="startSection(${i})"><b>${s.icon} Bölüm ${i+1}: ${s.title}</b><small>${completed[i]?"✓ Tamamlandı · "+earned[i]+" puan":s.desc}</small></button>`).join("");updateStats()}
+function startSection(i){if(i>0&&!completed[i-1])return;sectionIndex=i;qIndex=0;sectionStart=score;show("game");renderQuestion()}
+function renderQuestion(){selected=null;answered=false;const s=sections[sectionIndex],q=s.questions[qIndex];$("sectionIcon").textContent=s.icon;$("sectionTag").textContent="BÖLÜM "+(sectionIndex+1);$("sectionTitle").textContent=s.title;$("questionCount").textContent=`Görev ${qIndex+1} / ${s.questions.length}`;let pct=Math.round(qIndex/s.questions.length*100);$("progressText").textContent="İlerleme %"+pct;$("progressBar").style.width=pct+"%";$("feedback").className="hidden";$("feedback").textContent="";$("checkBtn").classList.remove("hidden");$("nextBtn").classList.add("hidden");
+$("taskArea").innerHTML=`<div class="question">${q.q}</div>${q.code?`<div class="code">${escapeHtml(q.code)}</div>`:""}<div class="options">${q.opts.map((o,j)=>`<button class="option" id="opt${j}" onclick="choose(${j})">${String.fromCharCode(65+j)}. ${escapeHtml(o)}</button>`).join("")}</div><p class="small">Bir yanıt seç ve cevabını kontrol et.</p>`}
+function escapeHtml(s){return String(s).replace(/[&<>"']/g,c=>({"&":"&amp;","<":"&lt;",">":"&gt;",'"':"&quot;","'":"&#39;"}[c]))}
+function choose(i){if(answered)return;selected=i;document.querySelectorAll(".option").forEach((b,j)=>b.classList.toggle("selected",i===j))}
+function checkAnswer(){if(selected===null){$("feedback").className="feedback bad";$("feedback").textContent="Önce seçeneklerden birini işaretlemelisin.";return}if(answered)return;answered=true;const q=sections[sectionIndex].questions[qIndex],good=selected===q.a;document.querySelectorAll(".option").forEach((b,j)=>{b.disabled=true;if(j===q.a)b.classList.add("correct");if(j===selected&&!good)b.classList.add("wrong")});let msg;if(good){score+=10;streak++;totalCorrect++;msg="Harika! +10 puan. "+q.why;if(streak===3){score+=20;msg+=" 🔥 Üç doğru cevap üst üste! +20 bonus!";streak=0}$("feedback").className="feedback good"}else{streak=0;msg="Bu kez olmadı. Doğru cevap: "+q.opts[q.a]+". "+q.why;$("feedback").className="feedback bad"}$("feedback").textContent=msg;$("checkBtn").classList.add("hidden");$("nextBtn").classList.remove("hidden");$("nextBtn").textContent=qIndex===sections[sectionIndex].questions.length-1?"Bölümü Tamamla 🏁":"Sonraki Görev ➜";updateStats()}
+function nextQuestion(){if(qIndex<sections[sectionIndex].questions.length-1){qIndex++;renderQuestion()}else{completed[sectionIndex]=true;earned[sectionIndex]=score-sectionStart;score+=50;updateStats();$("progressBar").style.width="100%";show("result");$("resultIcon").textContent=sectionIndex===3?"👾":"🏆";$("resultTitle").textContent=sectionIndex===3?"Canavarı yendin!":"Bölüm tamamlandı!";$("resultText").textContent=`${player}, ${sections[sectionIndex].title} bölümündeki görevleri bitirdin. Bölüm tamamlama ödülü: +50 puan.`;$("resultScore").textContent="+"+(earned[sectionIndex]+50);$("resultBadge").innerHTML=`<span class="badge">${sections[sectionIndex].icon} ${sectionIndex+1}. bölüm rozeti</span>`;if(completed.every(Boolean)){setTimeout(showFinal,250)}}}
+function showFinal(){show("final");let pct=Math.round(totalCorrect/totalQuestions*100);$("finalText").textContent=`Tebrikler ${player}! Dört bölümün tamamını bitirdin ve Kodlar Diyarı'nı kurtardın.`;$("finalScore").textContent=score+" ⭐";$("finalPercent").textContent=`Doğru cevap oranı: %${pct} (${totalCorrect}/${totalQuestions} doğru)`;updateStats()}
+function backToMap(){show("map");renderMap()}
+function resetGame(){score=0;streak=0;qIndex=0;completed=[false,false,false,false];earned=[0,0,0,0];totalCorrect=0;updateStats();show("welcome")}
+</script>
+</body>
+</html>

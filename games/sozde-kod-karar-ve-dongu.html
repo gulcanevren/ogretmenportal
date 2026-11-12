@@ -1,0 +1,245 @@
+<!DOCTYPE html>
+<html lang="tr">
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width, initial-scale=1, viewport-fit=cover">
+<title>SÖZDE KODU ÇÖZ! – Karar ve Döngü</title>
+<style>
+:root{--bg:#0f172a;--card:#1e293b;--tx:#f1f5f9;--mut:#94a3b8;--acc:#38bdf8;--ok:#22c55e;--bad:#ef4444;--warn:#facc15;--code:#0b1220;--bd:#334155;box-sizing:border-box;padding-top:env(safe-area-inset-top,0px);padding-bottom:env(safe-area-inset-bottom,0px)}
+@media (prefers-color-scheme:light){:root:not([data-theme="dark"]){--bg:#e0f2fe;--card:#fff;--tx:#0f172a;--mut:#475569;--code:#0f172a;--bd:#cbd5e1}}
+*{box-sizing:border-box}
+body{margin:0;background:var(--bg);color:var(--tx);font-family:system-ui,"Segoe UI",Arial,sans-serif;font-size:20px;min-height:100vh}
+#app{max-width:900px;margin:0 auto;padding:14px}
+.hud{display:flex;align-items:center;gap:12px;flex-wrap:wrap;margin-bottom:12px;font-weight:700}
+.bar{flex:1;min-width:120px;height:16px;background:var(--card);border-radius:9px;overflow:hidden;border:1px solid var(--bd)}
+.bar i{display:block;height:100%;background:linear-gradient(90deg,#38bdf8,#22c55e);transition:width .5s}
+.pt{background:var(--warn);color:#0f172a;padding:6px 16px;border-radius:20px}
+.pop{animation:pop .5s}
+@keyframes pop{50%{transform:scale(1.3)}}
+@keyframes shake{25%{transform:translateX(-8px)}75%{transform:translateX(8px)}}
+.card{background:var(--card);border-radius:20px;padding:22px;border:1px solid var(--bd)}
+h1{font-size:2.6rem;margin:.2em 0;color:var(--acc);font-family:Consolas,monospace}
+h2{margin:.2em 0 .5em;color:var(--acc)}
+.c{text-align:center}.big{font-size:1.5rem}
+.btn{display:block;margin:16px auto 0;font-size:1.4rem;font-weight:800;padding:18px 36px;border:0;border-radius:16px;background:linear-gradient(135deg,#38bdf8,#6366f1);color:#fff;cursor:pointer;min-height:64px}
+.btn:active{transform:scale(.97)}
+.chip{display:inline-block;background:#6366f1;color:#fff;border-radius:14px;padding:3px 14px;font-size:.85rem;font-weight:700;vertical-align:middle}
+.pr{background:var(--code);color:#e2e8f0;padding:12px 16px;border-radius:12px;border-left:6px solid var(--acc)}
+.code{background:var(--code);color:#e2e8f0;border-radius:14px;padding:10px;font-family:Consolas,monospace;font-size:1.1rem}
+.ln{padding:8px 12px;border-radius:8px;display:flex;justify-content:space-between;gap:8px;align-items:center;opacity:.55}
+.ln.on{background:#2563eb;opacity:1;font-weight:700}
+.tag{font-size:.7rem;padding:2px 10px;border-radius:10px;background:var(--warn);color:#0f172a;font-family:system-ui;white-space:nowrap}
+.tag.Girdi{background:#34d399}.tag.İşlem{background:#fb923c}.tag.Çıktı{background:#f472b6}.tag.Karar{background:#a78bfa}.tag.Döngü{background:#60a5fa}
+.vars{display:flex;gap:12px;flex-wrap:wrap;margin:14px 0}
+.v{flex:1;min-width:110px;text-align:center;background:var(--code);border:3px solid var(--acc);border-radius:14px;padding:10px;color:#e2e8f0;font-family:Consolas,monospace;font-size:1.3rem}
+.v b{display:block;font-size:2rem;color:var(--warn)}
+#list{list-style:none;padding:0;margin:12px 0}
+#list li{display:flex;justify-content:space-between;align-items:center;gap:8px;background:var(--code);color:#e2e8f0;border:2px solid var(--bd);border-radius:12px;padding:10px 14px;margin:8px 0;font-family:Consolas,monospace;font-size:1.05rem;cursor:grab}
+#list li.ok{border-color:var(--ok);background:#14532d}#list li.no{border-color:var(--bad);background:#7f1d1d;animation:shake .4s}
+.mv{font-size:1.2rem;width:48px;height:48px;border-radius:10px;border:0;background:#475569;color:#fff;margin-left:4px;cursor:pointer}
+.fb{margin-top:12px;border-radius:12px;font-weight:600}
+.fb.ok,.fb.bad{padding:14px;animation:pop .5s}
+.fb.ok{background:#14532d;color:#dcfce7}.fb.bad{background:#7f1d1d;color:#fee2e2}
+.fb div{margin:6px 0}
+.wrap{overflow-x:auto}
+table{border-collapse:collapse;width:100%;font-size:1rem}
+th,td{border:1px solid var(--bd);padding:6px;text-align:center}
+th{background:var(--code);color:#e2e8f0}
+td.l{text-align:left;font-family:Consolas,monospace;font-size:.9rem}
+input{width:76px;font-size:1.2rem;text-align:center;padding:8px;border-radius:8px;border:2px solid var(--bd);background:var(--bg);color:var(--tx)}
+input.ok{border-color:var(--ok);background:#14532d;color:#fff}input.no{border-color:var(--bad);background:#7f1d1d;color:#fff}
+small.a{display:block;color:var(--ok);font-weight:700}
+.ops{display:grid;grid-template-columns:repeat(auto-fit,minmax(180px,1fr));gap:10px;margin:12px 0}
+.ops div{background:var(--code);color:#e2e8f0;border-radius:12px;padding:10px;font-family:Consolas,monospace}
+.ops b{color:var(--warn);font-size:1.5rem}
+.tf{display:flex;gap:12px;flex-wrap:wrap}.tf .btn{flex:1;margin:0;min-width:130px}
+.t{background:linear-gradient(135deg,#22c55e,#16a34a)}.f{background:linear-gradient(135deg,#f87171,#dc2626)}
+.o{background:linear-gradient(135deg,#fb923c,#ea580c);font-size:1.1rem}
+.q{font-size:2.4rem;text-align:center;font-family:Consolas,monospace;margin:12px 0;color:var(--warn)}
+@media(max-width:600px){body{font-size:17px}h1{font-size:1.9rem}.btn{padding:14px 20px}.q{font-size:1.7rem}}
+</style>
+</head>
+<body>
+<div id="app"></div>
+<script src="https://cdnjs.cloudflare.com/ajax/libs/Sortable/1.15.0/Sortable.min.js"></script>
+<script>
+const $=s=>document.querySelector(s),app=$('#app');
+const rnd=(a,b)=>a+Math.floor(Math.random()*(b-a+1)),pick=a=>a[rnd(0,a.length-1)],shuf=a=>[...a].sort(()=>Math.random()-.5);
+const esc=s=>String(s).replace(/</g,'&lt;').replace(/>/g,'&gt;');
+let score=0,pot=0,sec=0,G;
+const tr=()=>{const s=[],v={};return{v,s,p:(l,c,o,e)=>s.push({l,v:{...v},c,o,e})}};
+const DUR=['DUR','','DUR, algoritmanın en son adımıdır.'],BAS=['BAŞLA','','Her algoritma BAŞLA ile başlar.'];
+const ALG={
+B:{n:'Yaş Kontrolü ve Ehliyet',vars:['ST','DY','Yaş'],p:'Adayın doğum yılından yaşı hesapla; 18 yaşını doldurduysa ehliyet alabileceğini, aksi halde henüz küçük olduğunu yazdır.',
+ outs:['Ehliyet alabilirsiniz.','Ehliyet almak için henüz küçüksünüz.'],
+ L:[BAS,['Sistem Tarihi (ST) değerini oku.','Girdi','Yaşı hesaplamak için önce sistem tarihi gerekir.'],['Doğum Yılı (DY) değerini oku.','Girdi','Yaş hesabı için doğum yılı da okunmalıdır.'],['Yaş = ST - DY','İşlem','ST ve DY okunmadan Yaş hesaplanamaz.'],['EĞER Yaş >= 18 İSE','Karar','Yaş hesaplanmadan koşul kontrol edilemez.'],['"Ehliyet alabilirsiniz." yazdır.','Çıktı','Bu mesaj koşul doğruysa yazdırılır; EĞER satırından hemen sonra gelir.'],['DEĞİLSE: "Ehliyet almak için henüz küçüksünüz." yazdır.','Çıktı','DEĞİLSE, EĞER bloğundan sonra gelir.'],DUR],
+ run(ST,DY){const{v,s,p}=tr();p(0);v.ST=ST;p(1);v.DY=DY;p(2);v.Yaş=ST-DY;p(3);const ok=v.Yaş>=18;p(4,ok?'D':'Y',0,`${v.Yaş} >= 18`);ok?p(5,0,this.outs[0]):p(6,0,this.outs[1]);p(7);return s}},
+C:{n:'Sıcaklık Kontrolü',vars:['sicaklik'],p:'Ortam sıcaklığı 20 °C’nin altına düşerse ısıtıcı çalışsın; değilse kullanıcıya bilgi verilsin.',
+ outs:['Isıtıcı çalıştırıldı.','Sıcaklık 20 °C’nin altında değildir.'],
+ L:[BAS,['Ortam sıcaklığını oku (sicaklik).','Girdi','Karar vermeden önce sıcaklık okunmalıdır.'],['EĞER sicaklik < 20 İSE','Karar','Koşul, sıcaklık okunduktan sonra kontrol edilir.'],['Isıtıcıyı çalıştır.','Çıktı','Koşul doğruysa yapılacak eylem EĞER satırından hemen sonra gelir.'],['DEĞİLSE: Ekrana "Sıcaklık 20 °C’nin altında değildir." yazdır.','Çıktı','DEĞİLSE, EĞER bloğundan sonra gelir.'],DUR],
+ run(t){const{v,s,p}=tr();p(0);v.sicaklik=t;p(1);const ok=t<20;p(2,ok?'D':'Y',0,`${t} < 20`);ok?p(3,0,this.outs[0]):p(4,0,this.outs[1]);p(5);return s}},
+D:{n:'Hatalı Giriş Kontrolü (Döngü)',vars:['sifre','tahmin'],p:'Kullanıcı doğru şifreyi girene kadar her hatalı denemede uyarı verilsin ve şifre tekrar istensin.',
+ L:[BAS,['Sistem şifresini belirle: sifre = "1234"','İşlem','Karşılaştırmadan önce doğru şifre belirlenmelidir.'],['Şifre al (tahmin).','Girdi','Kullanıcının tahmini, karşılaştırmadan önce alınmalıdır.'],['EĞER tahmin == sifre İSE','Karar','Tahmin alındıktan sonra doğru mu diye kontrol edilir.'],['Ekrana "Giriş Başarılı, Hoş Geldiniz!" yazdır ve ADIM 8’e GİT.','Çıktı','Doğru şifre durumunun işlemi EĞER satırından sonra gelir.'],['DEĞİLSE: Ekrana "Hatalı şifre girdiniz, tekrar deneyiniz." yazdır.','Çıktı','DEĞİLSE, EĞER bloğundan sonra gelir.'],['ADIM 3’e GİT.','Döngü','Hatalı şifrede tekrar şifre alma adımına dönülür; bu, DEĞİLSE bloğunun sonundadır.'],DUR],
+ run(gs){const{v,s,p}=tr();p(0);v.sifre='1234';p(1);for(const g of gs){v.tahmin=g;p(2);const ok=g==='1234';p(3,ok?'D':'Y',0,`"${g}" == "1234"`);if(ok){p(4,0,'Giriş Başarılı, Hoş Geldiniz!');p(7);break}p(5,0,'Hatalı şifre girdiniz, tekrar deneyiniz.');p(6)}return s}}
+};
+
+function show(n,html){
+  sec=n;
+  const h=n?`<div class="hud"><div>Bölüm ${Math.min(n,4)} / 4</div><div class="bar"><i style="width:${n>4?100:(n-1)/4*100}%"></i></div><div class="pt" id="pt">PUAN: ${score}</div></div>`:'';
+  app.innerHTML=h+`<div class="card">${html}</div>`;window.scrollTo(0,0);
+}
+function add(n){score+=n;const p=$('#pt');if(p){p.textContent='PUAN: '+score;p.classList.remove('pop');void p.offsetWidth;p.classList.add('pop')}}
+const bonus=()=>{add(20);pot+=20};
+function fb(ok,msg){const f=$('#fb');f.className='fb '+(ok?'ok':'bad');f.innerHTML=msg}
+function nextBtn(l,fn){const b=$('#go');b.textContent=l;b.onclick=fn}
+
+/* BAŞLANGIÇ */
+function start(){
+  score=0;pot=0;
+  const bi=()=>{const s=pick([2026,2027,2028,2029,2030]);return[s,s-rnd(14,22)]};
+  const b2=bi(),b3=bi(),t=rnd(8,30),gs=[...shuf(['0000','1111','4321','1243','1235']).slice(0,rnd(1,3)),'1234'];
+  G={s2:[{a:ALG.B,s:ALG.B.run(...b2),inf:`ST = ${b2[0]}, DY = ${b2[1]}`},{a:ALG.D,s:ALG.D.run(gs),inf:`Doğru şifre 1234. Kullanıcı sırayla şunları dener: ${gs.join(', ')}`}],
+     s3:[{a:ALG.C,s:ALG.C.run(t),inf:`sicaklik = ${t}`},{a:ALG.B,s:ALG.B.run(...b3),inf:`ST = ${b3[0]}, DY = ${b3[1]}`}]};
+  show(0,`<div class="c"><div style="font-size:4rem">💻</div><h1>SÖZDE KODU ÇÖZ!</h1>
+  <p class="big">Karar ve döngü algoritmalarının izini sür!</p>
+  <p>Yaş kontrolü, sıcaklık kontrolü ve şifre denemesi algoritmalarını çözeceksin.<br><small style="color:var(--mut)">Her oyunda sayılar ve sorular değişir.</small></p>
+  <button class="btn" id="go">OYUNA BAŞLA</button></div>`);
+  $('#go').onclick=()=>{
+    show(0,`<div class="c"><div style="font-size:3.5rem">⚙️</div><p class="big">Bilgisayar komutları sırayla uygular. EĞER satırında koşul DOĞRU ise bir yol, YANLIŞ ise DEĞİLSE yolu izlenir. Bazen de bir adıma geri dönülür (döngü). Sen akışı adım adım takip edeceksin.</p><button class="btn" id="go">BAŞLAYALIM!</button></div>`);
+    $('#go').onclick=()=>s1(0);
+  };
+}
+
+/* BÖLÜM 1 – SIRALA */
+function s1(k){
+  const a=[ALG.C,ALG.B,ALG.D][k];pot+=10;
+  const it=a.L.map((l,o)=>[l[0],o+1,l[2]]);let sh;do{sh=shuf(it)}while(sh.some((x,j)=>x[1]===j+1));
+  let tries=0,done=false;
+  show(1,`<h2>ALGORİTMAYI SIRALA <span class="chip">${k+1}/3 · ${a.n}</span></h2><div class="pr"><b>Problem:</b> ${a.p}</div>
+  <p>Adımları sürükleyerek (veya ▲▼ ile) doğru sıraya koy:</p>
+  <ul id="list">${sh.map(([t,o,w])=>`<li data-o="${o}" data-w="${w}"><span>${esc(t)}</span><span><button class="mv" data-d="-1">▲</button><button class="mv" data-d="1">▼</button></span></li>`).join('')}</ul>
+  <div id="fb" class="fb"></div><button class="btn" id="go">KONTROL ET</button>`);
+  const list=$('#list');
+  if(window.Sortable)new Sortable(list,{animation:150,filter:'.mv',preventOnFilter:false});
+  list.onclick=e=>{const b=e.target.closest('.mv');if(!b||done)return;const li=b.closest('li'),d=+b.dataset.d;
+    if(d<0&&li.previousElementSibling)list.insertBefore(li,li.previousElementSibling);
+    if(d>0&&li.nextElementSibling)list.insertBefore(li.nextElementSibling,li)};
+  $('#go').onclick=()=>{
+    const bad=[];[...list.children].forEach((li,j)=>{const ok=+li.dataset.o===j+1;li.className=ok?'ok':'no';if(!ok)bad.push(li)});
+    if(!bad.length){done=true;const p=tries?5:10;add(p);
+      const last=k===2;if(last)bonus();
+      fb(true,`🎉 Harika! Doğru sıraladın. +${p} puan${last?', bölüm bonusu +20!':''}`);
+      nextBtn(last?'SONRAKİ BÖLÜM ▶':'SONRAKİ ALGORİTMA ▶',()=>last?s2(0):s1(k+1));}
+    else{tries++;fb(false,`💡 Tekrar düşün! ${bad.length} adım yanlış yerde:`+bad.map(li=>`<div>❌ <b>${li.firstChild.textContent}</b>: ${li.dataset.w}</div>`).join(''))}
+  };
+}
+
+/* BÖLÜM 2 – DEĞİŞKENLERİ TAKİP ET */
+function note(a,s,i){
+  const x=s[i],p=s[i-1]||{v:{}},ch=Object.keys(x.v).filter(n=>x.v[n]!==p.v[n]);
+  if(x.o)return`📤 Ekrana yazıldı: “${x.o}”`;
+  if(ch.length)return`📝 ${ch[0]} = ${x.v[ch[0]]} oldu.`;
+  if(x.l===0)return'▶️ Algoritma başladı.';
+  if(a.L[x.l][1]==='Döngü')return'🔁 Akış 3. adıma geri döner.';
+  return'⏹️ Algoritma bitti.';
+}
+function s2(k){
+  const{a,s,inf}=G.s2[k];let i=0;
+  show(2,`<h2>DEĞİŞKENLERİ TAKİP ET <span class="chip">${a.n}</span></h2><p><b>${inf}</b></p>
+  <div class="code" id="cd"></div><div class="vars" id="vs"></div><div id="fb" class="fb"></div><div id="ac"></div><button class="btn" id="go"></button>`);
+  const draw=()=>{
+    const x=s[i],go=$('#go'),ac=$('#ac');ac.innerHTML='';go.style.display='';
+    $('#cd').innerHTML=a.L.map((l,j)=>`<div class="ln ${j===x.l?'on':''}"><span>${j+1}. ${esc(l[0])}</span>${l[1]?`<span class="tag ${l[1]}">${l[1]}</span>`:''}</div>`).join('');
+    $('#vs').innerHTML=a.vars.map(n=>`<div class="v">${n}<b>${x.v[n]===undefined?'?':x.v[n]}</b></div>`).join('');
+    nextBtn(...(i<s.length-1?['SONRAKİ ADIM ▶',()=>{i++;draw()}]:k<1?['SONRAKİ ALGORİTMA ▶',()=>s2(1)]:['BÖLÜMÜ BİTİR (+20 bonus)',()=>{bonus();s3(0)}]));
+    if(x.c){
+      pot+=10;go.style.display='none';
+      const f=$('#fb');f.className='fb pr';f.innerHTML=`🤔 <b>${esc(a.L[x.l][0])}</b> koşulu şu an DOĞRU mu, YANLIŞ mı?`;
+      ac.innerHTML='<div class="tf"><button class="btn t">DOĞRU</button><button class="btn f">YANLIŞ</button></div>';
+      ac.querySelectorAll('.btn').forEach(b=>b.onclick=()=>{
+        const good=(b.textContent==='DOĞRU')===(x.c==='D');if(good)add(10);
+        ac.innerHTML='';go.style.display='';
+        fb(good,`${good?'🎉 Harika!':'💡 Tekrar düşün!'} ${esc(x.e)} → ${x.c==='D'?'DOĞRU':'YANLIŞ'}.${good?' +10 puan':''}`);
+      });
+    }else fb(true,note(a,s,i));
+  };draw();
+}
+
+/* BÖLÜM 3 – TABLO */
+const nrm=(v,c)=>{v=v.trim().toLowerCase();if(v==='?'||v==='–')return'-';if(c){if(['d','t','doğru','dogru','true'].includes(v))return'D';if(['y','f','yanlış','yanlis','false'].includes(v))return'Y'}return v};
+function mc(h,opts,ok,why,tf,nx){
+  pot+=10;
+  show(sec,`${h}<div class="tf">${opts.map((t,j)=>`<button class="btn ${tf?['t','f'][j]:'o'}">${esc(t)}</button>`).join('')}</div><div id="fb" class="fb"></div><button class="btn" id="go" style="display:none"></button>`);
+  const bs=[...document.querySelectorAll('.tf .btn')];
+  bs.forEach((b,j)=>b.onclick=()=>{
+    bs.forEach(x=>x.disabled=true);const good=j===ok;if(good)add(10);
+    fb(good,`${good?'🎉 Harika!':'💡 Tekrar düşün!'} ${why}${good?' +10 puan':''}`);
+    const g=$('#go');g.style.display='block';nextBtn(...nx);
+  });
+}
+function s3(k){
+  const{a,s,inf}=G.s3[k],hasC=s.some(x=>x.c),cols=[...a.vars,...(hasC?['Koşul']:[])];
+  pot+=s.length*5;
+  show(3,`<h2>ELLE ÇALIŞTIRMA TABLOSU <span class="chip">${a.n}</span></h2>
+  <p><b>${inf}</b>. Her satır çalıştıktan sonra değişkenlerin değerini yaz. Değer yoksa <b>-</b> yaz; koşul sütununa <b>D</b> (doğru) veya <b>Y</b> (yanlış) yaz.</p>
+  <div class="wrap"><table><tr><th>Adım</th><th>Satır</th>${cols.map(c=>`<th>${c}</th>`).join('')}</tr>
+  ${s.map((x,r)=>`<tr><td>${r+1}</td><td class="l">${esc(a.L[x.l][0])}</td>${cols.map((c,j)=>`<td><input data-r="${r}" data-j="${j}" placeholder="?" maxlength="6" autocomplete="off"></td>`).join('')}</tr>`).join('')}</table></div>
+  <div id="fb" class="fb"></div><button class="btn" id="go">CEVAPLARI GÖNDER</button>`);
+  $('#go').onclick=()=>{
+    const ins=[...document.querySelectorAll('input')];
+    if(ins.some(x=>!x.value.trim())){fb(false,'💡 Boş hücre kalmasın! Değer yoksa - yaz.');return}
+    let pts=0;
+    s.forEach((x,r)=>{let ok=true;
+      ins.filter(i=>+i.dataset.r===r).forEach(i=>{
+        const j=+i.dataset.j,c=j>=a.vars.length,an=c?(x.c||'-'):String(x.v[a.vars[j]]??'-'),good=nrm(i.value,c)===an;
+        i.className=good?'ok':'no';i.disabled=true;if(!good){ok=false;i.insertAdjacentHTML('afterend',`<small class="a">${an}</small>`)}});
+      if(ok)pts+=5});
+    add(pts);
+    fb(pts===s.length*5,pts===s.length*5?`🎉 Harika! Tablonun tamamı doğru. +${pts} puan`:`💡 ${pts/5} / ${s.length} satır doğru (+${pts} puan). Yeşil yazılar doğru değerlerdir. Bir değişken, değer atanana kadar "-" kalır; atanan değer sonraki satırlarda korunur.`);
+    nextBtn('ÇIKTI SORUSU ▶',()=>{
+      const o=[...a.outs,'Hiçbir şey yazdırılmaz.'],ans=s.find(x=>x.o).o;
+      mc(`<h2>ÇIKTI NE OLUR? <span class="chip">${a.n}</span></h2><p class="c"><b>${inf}</b> için algoritmanın çıktısı hangisidir?</p>`,o,o.indexOf(ans),`Koşul sonucuna göre çıktı: “${ans}”`,0,
+        k<1?['SONRAKİ TABLO ▶',()=>s3(1)]:['SONRAKİ BÖLÜM (+20 bonus) ▶',()=>{bonus();s4()}]);
+    });
+  };
+}
+
+/* BÖLÜM 4 – DOĞRU/YANLIŞ + KARMA SORULAR */
+const DESC={'==':'Eşit mi?','!=':'Eşit değil mi?','<':'Küçük mü?','>':'Büyük mü?','<=':'Küçük veya eşit mi?','>=':'Büyük veya eşit mi?'};
+const cmp=(x,o,y)=>({'<':x<y,'>':x>y,'==':x===y,'!=':x!==y,'<=':x<=y,'>=':x>=y})[o];
+const WHYC={Girdi:'Girdi: kullanıcıdan veri alan satırdır.',İşlem:'İşlem: hesaplama veya atama yapan satırdır.',Çıktı:'Çıktı: ekrana sonuç yazdıran (veya bir eylem yaptıran) satırdır.',Karar:'Karar: EĞER ile bir koşulu kontrol eden satırdır.'};
+function s4(){
+  show(4,`<h2>DOĞRU MU YANLIŞ MI?</h2>
+  <div class="pr">Karşılaştırmanın sonucu sadece <b>DOĞRU (True)</b> veya <b>YANLIŞ (False)</b> olur. EĞER satırları bu sonuca göre karar verir.<br><b>Dikkat:</b> <code>=</code> değer <b>atar</b> (Yaş = ST - DY), <code>==</code> ise iki değeri <b>karşılaştırır</b>.</div>
+  <div class="ops">${Object.keys(DESC).map(o=>`<div><b>${esc(o)}</b><br>${DESC[o]}</div>`).join('')}</div>
+  <button class="btn" id="go">SORULARA GEÇ</button>`);
+  $('#go').onclick=()=>{
+    const ops=shuf(Object.keys(DESC)),nm=['<','>','<=','>='],Q=[];
+    const tf=(e,vals,x,o,y,pre='')=>{const r=cmp(x,o,y);Q.push([`<p class="c">${vals}</p><div class="q">${e}</div>`,['DOĞRU','YANLIŞ'],r?0:1,`${pre}${typeof x==='string'?`"${x}" ${esc(o)} "${y}"`:`${x} ${esc(o)} ${y}`} → ${r?'DOĞRU':'YANLIŞ'}.`,1])};
+    for(let k=0;k<3;k++){const x=rnd(1,100),y=Math.random()<.3?x:rnd(1,100);tf(`S1 ${esc(ops[k])} S2`,`S1 = ${x}, S2 = ${y}`,x,ops[k],y)}
+    for(let k=0;k<2;k++){const st=pick([2026,2027,2028,2029,2030]),ag=rnd(15,21),o=pick(nm);tf(`Yaş ${esc(o)} 18`,`ST = ${st}, DY = ${st-ag}`,ag,o,18,`Yaş = ${st} - ${st-ag} = ${ag}. `)}
+    for(let k=0;k<2;k++){const t=rnd(15,25),o=pick(nm);tf(`sicaklik ${esc(o)} 20`,`sicaklik = ${t}`,t,o,20)}
+    for(let k=0;k<2;k++){const g=pick(['1234','4321','1243','0000','1234']),o=pick(['==','!=']);tf(`tahmin ${o} sifre`,`sifre = "1234", tahmin = "${g}"`,g,o,'1234')}
+    const pool=[];Object.values(ALG).forEach(a=>a.L.forEach(l=>{if(['Girdi','İşlem','Çıktı','Karar'].includes(l[1])&&!l[0].startsWith('DEĞİLSE'))pool.push(l)}));
+    const T=['Girdi','İşlem','Çıktı','Karar'];
+    shuf(pool).slice(0,2).forEach(l=>Q.push([`<p class="c">Bu sözde kod satırı hangi türdendir?</p><div class="q" style="font-size:1.4rem">${esc(l[0])}</div>`,T,T.indexOf(l[1]),WHYC[l[1]],0]));
+    Q.push([`<p class="c"><code>Yaş = ST - DY</code> satırındaki <code>=</code> ne yapar?</p>`,['İki değeri karşılaştırır','Sağdaki değeri değişkene atar'],1,'= işareti atama yapar: ST - DY sonucu Yaş değişkenine yazılır. Karşılaştırma için == kullanılır.',0]);
+    const n=rnd(1,3);Q.push([`<p class="c">Şifre algoritmasında kullanıcı doğru şifreyi <b>${n+1}.</b> denemede giriyor. “Hatalı şifre girdiniz” mesajı kaç kez yazdırılır?</p>`,['1','2','3','4'],n-1,`İlk ${n} deneme hatalı olduğundan uyarı ${n} kez yazdırılır, sonra giriş başarılı olur.`,0]);
+    const QQ=shuf(Q);
+    const run=i=>mc(`<h2>SORU ${i+1} / ${QQ.length}</h2>${QQ[i][0]}`,QQ[i][1],QQ[i][2],QQ[i][3],QQ[i][4],i<QQ.length-1?['SONRAKİ SORU ▶',()=>run(i+1)]:['SONUCU GÖR 🏆 (+20 bonus)',()=>{bonus();result()}]);
+    run(0);
+  };
+}
+
+/* SONUÇ */
+function result(){
+  const p=score/pot*100;
+  const m=p>=90?'Algoritma ustası! 🏆':p>=70?'Çok iyi! Birkaç küçük hatayla daha da gelişebilirsin. ⭐':p>=50?'İyi başlangıç! Koşulların DOĞRU/YANLIŞ sonucuna göre akışın nasıl değiştiğine biraz daha dikkat et. 👍':'Pes etme! Sözde kodu satır satır takip ederek tekrar dene. 💪';
+  show(5,`<div class="c"><div style="font-size:4rem">🎉</div><h1>TEBRİKLER!</h1><p class="big">Sözde kod görevini tamamladın.</p>
+  <p class="big"><b>Toplam Puan: ${score} / ${pot}</b></p><p class="big">${m}</p><button class="btn" id="go">YENİ SAYILARLA TEKRAR OYNA</button></div>`);
+  $('#go').onclick=start;
+}
+start();
+</script>
+</body>
+</html>

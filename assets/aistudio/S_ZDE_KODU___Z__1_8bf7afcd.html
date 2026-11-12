@@ -1,0 +1,222 @@
+<!DOCTYPE html>
+<html lang="tr">
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width, initial-scale=1, viewport-fit=cover">
+<title>SÖZDE KODU ÇÖZ!</title>
+<style>
+:root{--bg:#0f172a;--card:#1e293b;--tx:#f1f5f9;--mut:#94a3b8;--acc:#38bdf8;--ok:#22c55e;--bad:#ef4444;--warn:#facc15;--code:#0b1220;--bd:#334155;box-sizing:border-box;padding-top:env(safe-area-inset-top,0px);padding-bottom:env(safe-area-inset-bottom,0px)}
+@media (prefers-color-scheme:light){:root:not([data-theme="dark"]){--bg:#e0f2fe;--card:#fff;--tx:#0f172a;--mut:#475569;--code:#0f172a;--bd:#cbd5e1}}
+*{box-sizing:border-box}
+body{margin:0;background:var(--bg);color:var(--tx);font-family:system-ui,"Segoe UI",Arial,sans-serif;font-size:20px;min-height:100vh}
+#app{max-width:900px;margin:0 auto;padding:14px}
+.hud{display:flex;align-items:center;gap:12px;flex-wrap:wrap;margin-bottom:12px;font-weight:700}
+.bar{flex:1;min-width:120px;height:16px;background:var(--card);border-radius:9px;overflow:hidden;border:1px solid var(--bd)}
+.bar i{display:block;height:100%;background:linear-gradient(90deg,#38bdf8,#22c55e);transition:width .5s}
+.pt{background:var(--warn);color:#0f172a;padding:6px 16px;border-radius:20px}
+.pop{animation:pop .5s}
+@keyframes pop{50%{transform:scale(1.3)}}
+@keyframes shake{25%{transform:translateX(-8px)}75%{transform:translateX(8px)}}
+.card{background:var(--card);border-radius:20px;padding:22px;border:1px solid var(--bd)}
+h1{font-size:2.6rem;margin:.2em 0;color:var(--acc);font-family:Consolas,monospace}
+h2{margin:.2em 0 .5em;color:var(--acc)}
+.c{text-align:center}
+.btn{display:block;margin:16px auto 0;font-size:1.4rem;font-weight:800;padding:18px 36px;border:0;border-radius:16px;background:linear-gradient(135deg,#38bdf8,#6366f1);color:#fff;cursor:pointer;min-height:64px}
+.btn:active{transform:scale(.97)}
+.big{font-size:1.5rem}
+.pr{background:var(--code);color:#e2e8f0;padding:12px 16px;border-radius:12px;border-left:6px solid var(--acc)}
+.code{background:var(--code);color:#e2e8f0;border-radius:14px;padding:10px;font-family:Consolas,monospace;font-size:1.2rem}
+.ln{padding:8px 12px;border-radius:8px;display:flex;justify-content:space-between;gap:8px;align-items:center;opacity:.55}
+.ln.on{background:#2563eb;opacity:1;font-weight:700}
+.tag{font-size:.7rem;padding:2px 10px;border-radius:10px;background:var(--warn);color:#0f172a;font-family:system-ui}
+.tag.Girdi{background:#34d399}.tag.İşlem{background:#fb923c}.tag.Çıktı{background:#f472b6}
+.vars{display:flex;gap:12px;flex-wrap:wrap;margin:14px 0}
+.v{flex:1;min-width:120px;text-align:center;background:var(--code);border:3px solid var(--acc);border-radius:14px;padding:10px;color:#e2e8f0;font-family:Consolas,monospace;font-size:1.4rem}
+.v b{display:block;font-size:2.2rem;color:var(--warn)}
+#list{list-style:none;padding:0;margin:12px 0}
+#list li{display:flex;justify-content:space-between;align-items:center;gap:8px;background:var(--code);color:#e2e8f0;border:2px solid var(--bd);border-radius:12px;padding:12px 14px;margin:8px 0;font-family:Consolas,monospace;font-size:1.15rem;cursor:grab}
+#list li.ok{border-color:var(--ok);background:#14532d}#list li.no{border-color:var(--bad);background:#7f1d1d;animation:shake .4s}
+.mv{font-size:1.2rem;width:48px;height:48px;border-radius:10px;border:0;background:#475569;color:#fff;margin-left:4px;cursor:pointer}
+.fb{margin-top:12px;padding:0;border-radius:12px;font-weight:600}
+.fb.ok,.fb.bad{padding:14px;animation:pop .5s}
+.fb.ok{background:#14532d;color:#dcfce7}.fb.bad{background:#7f1d1d;color:#fee2e2}
+.fb div{margin:6px 0}
+.wrap{overflow-x:auto}
+table{border-collapse:collapse;width:100%;font-size:1.05rem}
+th,td{border:1px solid var(--bd);padding:6px;text-align:center}
+th{background:var(--code);color:#e2e8f0}
+td.l{text-align:left;font-family:Consolas,monospace}
+input{width:80px;font-size:1.3rem;text-align:center;padding:8px;border-radius:8px;border:2px solid var(--bd);background:var(--bg);color:var(--tx)}
+input.ok{border-color:var(--ok);background:#14532d;color:#fff}input.no{border-color:var(--bad);background:#7f1d1d;color:#fff}
+small.a{display:block;color:var(--ok);font-weight:700}
+.ops{display:grid;grid-template-columns:repeat(auto-fit,minmax(200px,1fr));gap:10px;margin:12px 0}
+.ops div{background:var(--code);color:#e2e8f0;border-radius:12px;padding:10px;font-family:Consolas,monospace}
+.ops b{color:var(--warn);font-size:1.5rem}
+.tf{display:flex;gap:16px}.tf .btn{flex:1;margin:0}
+.t{background:linear-gradient(135deg,#22c55e,#16a34a)}.f{background:linear-gradient(135deg,#f87171,#dc2626)}
+.q{font-size:3rem;text-align:center;font-family:Consolas,monospace;margin:16px 0;color:var(--warn)}
+@media(max-width:600px){body{font-size:17px}h1{font-size:1.9rem}.btn{padding:14px 20px}}
+</style>
+</head>
+<body>
+<div id="app"></div>
+<script src="https://cdnjs.cloudflare.com/ajax/libs/Sortable/1.15.0/Sortable.min.js"></script>
+<script>
+const $=s=>document.querySelector(s);
+const app=$('#app');
+let score=0,sec=0;
+const MAX=180;
+const esc=s=>String(s).replace(/</g,'&lt;').replace(/>/g,'&gt;');
+function show(n,html){
+  sec=n;
+  const h=n?`<div class="hud"><div>Bölüm ${n} / 4</div><div class="bar"><i style="width:${n>4?100:(n-1)/4*100}%"></i></div><div class="pt" id="pt">PUAN: ${score}</div></div>`:'';
+  app.innerHTML=h+`<div class="card">${html}</div>`;
+  window.scrollTo(0,0);
+}
+function add(n){
+  score+=n;const p=$('#pt');
+  if(p){p.textContent='PUAN: '+score;p.classList.remove('pop');void p.offsetWidth;p.classList.add('pop');}
+}
+function fb(ok,msg){const f=$('#fb');f.className='fb '+(ok?'ok':'bad');f.innerHTML=msg;}
+function nextBtn(label,fn){const b=$('#go');b.textContent=label;b.onclick=fn;}
+
+/* BAŞLANGIÇ */
+function start(){
+  show(0,`<div class="c"><div style="font-size:4rem">💻</div><h1>SÖZDE KODU ÇÖZ!</h1>
+  <p class="big">Algoritmanın izini sür, değişkenleri takip et ve doğru sonucu bul!</p>
+  <p>Bir algoritmanın nasıl çalıştığını keşfetmeye hazır mısın?</p>
+  <button class="btn" id="go">OYUNA BAŞLA</button></div>`);
+  score=0;
+  $('#go').onclick=()=>show(0,`<div class="c"><div style="font-size:3.5rem">⚙️</div>
+  <p class="big">Bilgisayar verilen komutları sırayla uygular. Sen de algoritmanın nasıl çalıştığını adım adım takip edeceksin.</p>
+  <button class="btn" id="go">BAŞLAYALIM!</button></div>`)||($('#go').onclick=s1);
+}
+
+/* BÖLÜM 1 */
+const ITEMS=[['Toplam = S1 + S2',4],['DUR',6],['İkinci sayıyı kullanıcıdan al.',3],['BAŞLA',1],['Toplam sonucunu ekrana yazdır.',5],['Birinci sayıyı kullanıcıdan al.',2]];
+const WHY={1:'Her algoritma BAŞLA ile başlar.',2:'Önce birinci sayıyı almamız gerekir.',3:'Birinci sayıdan sonra ikinci sayı alınır.',4:'Önce sayıları almamız gerekir. Sayılar alınmadan Toplam = S1 + S2 işlemi yapılamaz.',5:'Sonuç hesaplandıktan sonra ekrana yazdırılır.',6:'DUR, algoritmanın en son adımıdır.'};
+function s1(){
+  let tries=0,done=false;
+  show(1,`<h2>ALGORİTMAYI SIRALA</h2>
+  <div class="pr"><b>Problem:</b> Bir kullanıcının girdiği iki sayının toplamını bul ve sonucu ekrana yazdır.</div>
+  <p>Adımları sürükleyerek (veya ▲▼ ile) doğru sıraya koy:</p>
+  <ul id="list">${ITEMS.map(([t,o])=>`<li data-o="${o}"><span>${t}</span><span><button class="mv" data-d="-1">▲</button><button class="mv" data-d="1">▼</button></span></li>`).join('')}</ul>
+  <div id="fb" class="fb"></div><button class="btn" id="go">KONTROL ET</button>`);
+  const list=$('#list');
+  if(window.Sortable)new Sortable(list,{animation:150,filter:'.mv',preventOnFilter:false});
+  list.onclick=e=>{
+    const b=e.target.closest('.mv');if(!b||done)return;
+    const li=b.closest('li'),d=+b.dataset.d;
+    if(d<0&&li.previousElementSibling)list.insertBefore(li,li.previousElementSibling);
+    if(d>0&&li.nextElementSibling)list.insertBefore(li.nextElementSibling,li);
+  };
+  $('#go').onclick=()=>{
+    const lis=[...list.children];let bad=[];
+    lis.forEach((li,i)=>{const ok=+li.dataset.o===i+1;li.className=ok?'ok':'no';if(!ok)bad.push(li);});
+    if(!bad.length){
+      done=true;const p=tries?5:10;add(p+20);
+      fb(true,`🎉 Harika! Algoritmayı doğru sıraladın. +${p} puan, bölüm bonusu +20!`);
+      nextBtn('SONRAKİ BÖLÜM ▶',s2);
+    }else{
+      tries++;
+      fb(false,`💡 Tekrar düşün! ${bad.length} adım yanlış yerde:`+bad.map(li=>`<div>❌ <b>${li.firstChild.textContent}</b>: ${WHY[li.dataset.o]}</div>`).join(''));
+    }
+  };
+}
+
+/* BÖLÜM 2 */
+const L=[['BAŞLA',''],['S1 değerini oku.','Girdi'],['S2 değerini oku.','Girdi'],['Toplam = S1 + S2','İşlem'],['Toplam değerini yazdır.','Çıktı'],['DUR','']];
+const V=[['?','?','?'],['15','?','?'],['15','25','?'],['15','25','40'],['15','25','40'],['15','25','40']];
+const NOTE=['Algoritma başladı. Henüz hiçbir değişkenin değeri yok.','Girdi: S1 değişkenine 15 yüklendi.','Girdi: S2 değişkenine 25 yüklendi.','İşlem: 15 + 25 = 40, sonuç Toplam değişkenine yazıldı.','Çıktı: Ekrana 40 yazdırıldı.','Algoritma bitti.'];
+function s2(){
+  let i=0;
+  show(2,`<h2>DEĞİŞKENLERİ TAKİP ET</h2><p>Örnek girdi: <b>S1 = 15</b>, <b>S2 = 25</b>. Satır satır ilerle ve değişkenlere bak.</p>
+  <div class="code" id="cd"></div><div class="vars" id="vs"></div><div id="fb" class="fb"></div>
+  <button class="btn" id="go"></button>`);
+  const draw=()=>{
+    $('#cd').innerHTML=L.map((l,k)=>`<div class="ln ${k===i?'on':''}"><span>${k+1}. ${l[0]}</span>${l[1]?`<span class="tag ${l[1]}">${l[1]}</span>`:''}</div>`).join('');
+    $('#vs').innerHTML=['S1','S2','Toplam'].map((n,k)=>`<div class="v">${n}<b>${V[i][k]}</b></div>`).join('');
+    fb(true,(i===4?'📤 ':'👉 ')+NOTE[i]+(i===4?' <b>Sonuç = 40</b>':''));
+    const b=$('#go');
+    if(i<5){b.textContent='SONRAKİ ADIM ▶';b.onclick=()=>{i++;draw();};}
+    else{b.textContent='BÖLÜMÜ BİTİR (+10 +20 bonus)';b.onclick=()=>{add(30);s3();};}
+  };
+  draw();
+}
+
+/* BÖLÜM 3 */
+const OPS=['BAŞLA','S1 değerini oku','S2 değerini oku','Toplam = S1 + S2','Toplamı yazdır','DUR'];
+const ANS=[['-','-','-'],['15','-','-'],['15','25','-'],['15','25','40'],['15','25','40'],['15','25','40']];
+const nrm=v=>{v=v.trim();return(v==='?'||v==='–')?'-':v;};
+function s3(){
+  show(3,`<h2>ELLE ÇALIŞTIRMA TABLOSU</h2><p><b>S1 = 15</b>, <b>S2 = 25</b> olsun. Her adımdan sonra değişkenlerin değerini yaz. Henüz değer atanmadıysa <b>-</b> yaz.</p>
+  <div class="wrap"><table><tr><th>Adım</th><th>İşlem</th><th>S1</th><th>S2</th><th>Toplam</th></tr>
+  ${OPS.map((o,r)=>`<tr><td>${r+1}</td><td class="l">${o}</td>${[0,1,2].map(c=>`<td><input data-r="${r}" data-c="${c}" placeholder="?" maxlength="4" autocomplete="off"></td>`).join('')}</tr>`).join('')}</table></div>
+  <div id="fb" class="fb"></div><button class="btn" id="go">CEVAPLARI GÖNDER</button>`);
+  $('#go').onclick=()=>{
+    const ins=[...document.querySelectorAll('input')];
+    if(ins.some(x=>!x.value.trim())){fb(false,'💡 Boş hücre kalmasın! Değeri henüz bilinmeyen değişken için - yaz.');return;}
+    let pts=0;
+    for(let r=0;r<6;r++){
+      let rowOk=true;
+      ins.filter(x=>+x.dataset.r===r).forEach(x=>{
+        const a=ANS[r][x.dataset.c],ok=nrm(x.value)===a;
+        x.className=ok?'ok':'no';x.disabled=true;
+        if(!ok){rowOk=false;x.insertAdjacentHTML('afterend',`<small class="a">${a}</small>`);}
+      });
+      if(rowOk)pts+=5;
+    }
+    add(pts+20);
+    fb(pts===30,pts===30?`🎉 Harika! Tablonun tamamı doğru. +${pts} puan, bonus +20!`:`💡 ${pts/5} / 6 satır doğru (+${pts} puan, bonus +20). Yeşil yazılar doğru değerlerdir. Bir değişken, satırı çalıştırıp değer atanana kadar "-" kalır ve atanan değer sonraki adımlarda korunur.`);
+    nextBtn('SONRAKİ BÖLÜM ▶',s4);
+  };
+}
+
+/* BÖLÜM 4 */
+const DESC={'=':'Eşittir: iki değer aynı mı?','>':'Büyüktür: soldaki sağdakinden büyük mü?','<':'Küçüktür: soldaki sağdakinden küçük mü?','>=':'Büyük veya eşittir: soldaki sağdakinden büyük ya da ona eşit mi?','<=':'Küçük veya eşittir: soldaki sağdakinden küçük ya da ona eşit mi?','!=':'Eşit değildir: iki değer farklı mı?'};
+const cmp=(a,o,b)=>({'<':a<b,'>':a>b,'=':a===b,'!=':a!==b,'<=':a<=b,'>=':a>=b})[o];
+const rnd=n=>1+Math.floor(Math.random()*n);
+function s4(){
+  show(4,`<h2>DOĞRU MU YANLIŞ MI?</h2>
+  <div class="pr">Karşılaştırma işlemlerinin sonucu sadece iki değer olabilir: <b>DOĞRU (True)</b> veya <b>YANLIŞ (False)</b>.</div>
+  <div class="ops">${Object.keys(DESC).map(o=>`<div><b>${esc(o)}</b><br>${DESC[o].split(':')[0]}</div>`).join('')}</div>
+  <button class="btn" id="go">SORULARA GEÇ</button>`);
+  $('#go').onclick=()=>{
+    const Q=[[15,'<',25],[15,'>',25],[25,'=',25]];
+    const ops=Object.keys(DESC).sort(()=>Math.random()-.5);
+    for(let k=0;k<2;k++){let a=rnd(100),b=rnd(100);const o=ops[k];if(Math.random()<.35)b=a;Q.push([a,o,b]);}
+    ask(Q,0,0);
+  };
+}
+function ask(Q,i,ok){
+  const [a,o,b]=Q[i];
+  show(4,`<h2>DOĞRU MU YANLIŞ MI? <small style="color:var(--mut)">Soru ${i+1}/5</small></h2>
+  <p class="c">Ana değerler: <b>S1 = ${i<3?15:a}</b> &nbsp; <b>S2 = ${i<3?25:b}</b></p>
+  <div class="q">${a} ${esc(o)} ${b}</div>
+  <div class="tf"><button class="btn t" data-v="1">DOĞRU</button><button class="btn f" data-v="0">YANLIŞ</button></div>
+  <div id="fb" class="fb"></div><button class="btn" id="go" style="display:none"></button>`);
+  document.querySelectorAll('.tf .btn').forEach(bt=>bt.onclick=()=>{
+    const res=cmp(a,o,b),good=(bt.dataset.v==='1')===res;
+    document.querySelectorAll('.tf .btn').forEach(x=>x.disabled=true);
+    if(good){add(10);ok++;}
+    fb(good,good?`🎉 Harika! ${a} ${esc(o)} ${b} ifadesinin sonucu ${res?'DOĞRU':'YANLIŞ'}. +10 puan`:`💡 Tekrar düşün! ${DESC[o]} ${a} ${esc(o)} ${b} ifadesinin sonucu ${res?'DOĞRU':'YANLIŞ'}.`);
+    const g=$('#go');g.style.display='block';
+    if(i<4){g.textContent='SONRAKİ SORU ▶';g.onclick=()=>ask(Q,i+1,ok);}
+    else{add(20);g.textContent='SONUCU GÖR 🏆 (+20 bonus)';g.onclick=result;}
+  });
+}
+
+/* SONUÇ */
+function result(){
+  const p=score/MAX*100;
+  const m=p>=90?'Algoritma ustası! 🏆':p>=70?'Çok iyi! Birkaç küçük hatayla daha da gelişebilirsin. ⭐':p>=50?'İyi başlangıç! Değişkenlerin adım adım nasıl değiştiğine biraz daha dikkat et. 👍':'Pes etme! Sözde kodu satır satır takip ederek tekrar dene. 💪';
+  show(5,`<div class="c"><div style="font-size:4rem">🎉</div><h1>TEBRİKLER!</h1>
+  <p class="big">Sözde kod görevini tamamladın.</p>
+  <p class="big"><b>Toplam Puan: ${score} / ${MAX}</b></p>
+  <p class="big">${m}</p><button class="btn" id="go">TEKRAR OYNA</button></div>`);
+  $('#go').onclick=start;
+}
+start();
+</script>
+</body>
+</html>

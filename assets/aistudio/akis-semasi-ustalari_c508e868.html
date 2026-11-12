@@ -1,0 +1,516 @@
+<!DOCTYPE html>
+<html lang="tr">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>Akış Şeması Ustaları: Algoritma Macerası</title>
+<!-- Tailwind CSS CDN (sürüm sabitlendi) -->
+<script src="https://cdn.jsdelivr.net/npm/@tailwindcss/browser@4.1.11"></script>
+<!-- Google Fonts -->
+<link href="https://fonts.googleapis.com/css2?family=Poppins:wght@400;500;600;700;800&display=swap" rel="stylesheet">
+<style>
+body{font-family:'Poppins',sans-serif;background:linear-gradient(135deg,#0f172a 0%,#1e1b4b 50%,#312e81 100%);color:#f8fafc;min-height:100vh}
+.flow-shape-start{border-radius:50px}
+.flow-shape-process{border-radius:4px}
+.flow-shape-io{transform:skew(-15deg)}
+.flow-shape-decision{transform:rotate(45deg)}
+.pulse-glow{box-shadow:0 0 20px rgba(56,189,248,.5)}
+</style>
+</head>
+<body class="flex flex-col min-h-screen selection:bg-cyan-500 selection:text-white">
+
+<!-- Üst Bilgi Barı -->
+<header class="bg-slate-900/80 backdrop-blur-md border-b border-slate-800 sticky top-0 z-50 px-6 py-4 flex justify-between items-center shadow-lg">
+<div class="flex items-center space-x-3 cursor-pointer" onclick="goToMenu()">
+<div class="w-10 h-10 rounded-xl bg-gradient-to-tr from-cyan-500 to-indigo-600 flex items-center justify-center text-white font-bold text-xl shadow-md">⚡</div>
+<div>
+<h1 class="font-extrabold text-lg text-transparent bg-clip-text bg-gradient-to-r from-cyan-400 to-yellow-400">Akış Şeması Ustaları</h1>
+<p class="text-xs text-slate-400">Algoritma Macerası v1.0</p>
+</div>
+</div>
+<div class="flex items-center space-x-4">
+<div class="bg-slate-800/80 border border-slate-700 px-4 py-1.5 rounded-full flex items-center space-x-2 text-sm shadow-inner">
+<span class="text-yellow-400 font-bold">⭐ Puan:</span>
+<span id="total-score" class="font-extrabold text-cyan-300">0</span>
+</div>
+<button onclick="openProfile()" class="bg-indigo-600 hover:bg-indigo-500 text-white px-3.5 py-1.5 rounded-lg text-sm font-semibold transition shadow-md flex items-center space-x-1"><span>Profil & Rozetler</span></button>
+<button onclick="openTeacherGuide()" class="bg-slate-800 hover:bg-slate-700 text-slate-300 px-3 py-1.5 rounded-lg text-sm font-semibold transition border border-slate-700">Öğretmen Rehberi</button>
+</div>
+</header>
+
+<main class="flex-1 flex flex-col items-center justify-center p-4 max-w-5xl mx-auto w-full">
+
+<!-- 1. ANA MENÜ -->
+<div id="screen-menu" class="w-full text-center space-y-8 py-12">
+<div class="space-y-4 max-w-2xl mx-auto">
+<span class="bg-cyan-500/10 text-cyan-400 border border-cyan-500/30 text-xs font-semibold px-3 py-1 rounded-full uppercase tracking-wider">9. Sınıf Bilişim Teknolojileri</span>
+<h2 class="text-4xl md:text-5xl font-extrabold tracking-tight text-white leading-tight">Algoritma Dünyasını <span class="text-transparent bg-clip-text bg-gradient-to-r from-cyan-400 to-yellow-400">Keşfetmeye Başla!</span></h2>
+<p class="text-slate-300 text-base md:text-lg">Sembolleri tanı, akış yönünü takip et, hataları ayıkla ve sıfırdan akış şemaları tasarlayarak usta bir programcı ol.</p>
+</div>
+<div class="flex flex-col sm:flex-row justify-center items-center gap-4 pt-4">
+<button onclick="goToLevelMap()" class="w-full sm:w-auto bg-gradient-to-r from-cyan-500 to-blue-600 hover:from-cyan-400 hover:to-blue-500 text-white font-bold text-lg px-8 py-4 rounded-2xl shadow-xl transition transform hover:-translate-y-0.5 active:translate-y-0">🚀 Oyuna Başla</button>
+<button onclick="openProfile()" class="w-full sm:w-auto bg-slate-800 hover:bg-slate-700 text-slate-200 border border-slate-700 font-semibold px-6 py-4 rounded-2xl transition">🏆 Başarılarım ve Profilim</button>
+</div>
+<div class="grid grid-cols-1 md:grid-cols-3 gap-6 pt-10 text-left">
+<div class="bg-slate-900/60 border border-slate-800 p-6 rounded-2xl shadow-md">
+<div class="text-cyan-400 text-2xl mb-2">🎯</div>
+<h3 class="font-bold text-white text-lg">6 Farklı Seviye</h3>
+<p class="text-slate-400 text-sm mt-1">Temel sembol tanımadan sıfırdan akış şeması mimariliğine kadar kademeli görevler.</p>
+</div>
+<div class="bg-slate-900/60 border border-slate-800 p-6 rounded-2xl shadow-md">
+<div class="text-yellow-400 text-2xl mb-2">💡</div>
+<h3 class="font-bold text-white text-lg">Anında Geri Bildirim</h3>
+<p class="text-slate-400 text-sm mt-1">Yaptığın her hamlede açıklayıcı ipuçları ve eğitici düzeltmeler ile kalıcı öğrenme.</p>
+</div>
+<div class="bg-slate-900/60 border border-slate-800 p-6 rounded-2xl shadow-md">
+<div class="text-purple-400 text-2xl mb-2">🎖️</div>
+<h3 class="font-bold text-white text-lg">Rozetler ve Yıldızlar</h3>
+<p class="text-slate-400 text-sm mt-1">Seviyeleri tamamla, rozetleri topla ve algoritmik becerilerini kanıtla.</p>
+</div>
+</div>
+</div>
+
+<!-- 2. SEVİYE HARİTASI -->
+<div id="screen-levels" class="w-full hidden space-y-6 py-6">
+<div class="flex justify-between items-center">
+<div>
+<h2 class="text-2xl font-bold text-white">Seviye Haritası</h2>
+<p class="text-slate-400 text-sm">Oynamak istediğin seviyeyi seç.</p>
+</div>
+<button onclick="goToMenu()" class="text-sm bg-slate-800 hover:bg-slate-700 text-slate-300 px-4 py-2 rounded-xl border border-slate-700 transition">← Ana Menüye Dön</button>
+</div>
+<div id="levels-grid" class="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-6"></div>
+</div>
+
+<!-- 3. OYUN EKRANI -->
+<div id="screen-game" class="w-full hidden space-y-6 py-4">
+<div class="bg-slate-900/80 border border-slate-800 p-4 rounded-2xl flex flex-wrap justify-between items-center gap-4">
+<div>
+<span id="game-level-badge" class="text-xs font-semibold px-3 py-1 rounded-full bg-cyan-500/10 text-cyan-400 border border-cyan-500/30">Seviye 1</span>
+<h3 id="game-level-title" class="text-xl font-bold text-white mt-1">Sembol Avcısı</h3>
+</div>
+<div class="flex items-center space-x-6 text-sm">
+<div>Soru: <span id="current-q-index" class="font-bold text-cyan-400">1</span> / <span id="total-q-index" class="font-bold text-slate-300">6</span></div>
+<div>Can/İpucu Hakkı: <span id="lives-count" class="font-bold text-yellow-400">⭐⭐⭐</span></div>
+</div>
+</div>
+<div id="game-content-area" class="bg-slate-900/90 border border-slate-800 p-6 md:p-8 rounded-3xl shadow-2xl space-y-6"></div>
+<div id="feedback-box" class="hidden p-4 rounded-2xl text-sm border font-medium flex items-start space-x-3 transition-all">
+<div id="feedback-icon" class="text-xl">✨</div>
+<div class="flex-1">
+<h4 id="feedback-title" class="font-bold">Harika!</h4>
+<p id="feedback-text" class="text-slate-300 mt-0.5">Açıklama metni buraya gelecektir.</p>
+</div>
+<button id="next-question-btn" onclick="nextStep()" class="bg-white text-slate-900 font-bold px-4 py-2 rounded-xl text-xs hover:bg-slate-200 transition shadow">Devam Et →</button>
+</div>
+</div>
+
+<!-- 4. SEVİYE TAMAMLAMA -->
+<div id="screen-victory" class="w-full hidden text-center space-y-6 py-12 max-w-lg mx-auto bg-slate-900/90 border border-slate-800 p-8 rounded-3xl shadow-2xl">
+<div class="text-6xl animate-bounce">🎉</div>
+<h2 class="text-3xl font-extrabold text-white">Seviye Tamamlandı!</h2>
+<p id="victory-message" class="text-slate-300 text-sm">Harika iş çıkardın, algoritma mantığını başarıyla kavradın.</p>
+<div class="flex justify-center space-x-2 text-3xl py-2" id="victory-stars">⭐⭐⭐</div>
+<div class="bg-slate-800/60 p-4 rounded-2xl border border-slate-700/60 flex justify-around text-center">
+<div>
+<div class="text-xs text-slate-400">Kazanılan Puan</div>
+<div id="victory-points" class="text-xl font-bold text-cyan-400">+50</div>
+</div>
+<div>
+<div class="text-xs text-slate-400">Toplam Puan</div>
+<div id="victory-total" class="text-xl font-bold text-yellow-400">150</div>
+</div>
+</div>
+<div class="flex flex-col sm:flex-row gap-3 pt-4">
+<button onclick="goToLevelMap()" class="flex-1 bg-slate-800 hover:bg-slate-700 text-slate-200 font-semibold py-3 px-4 rounded-xl border border-slate-700 transition">Seviye Haritasına Dön</button>
+<button id="next-level-btn" onclick="startNextLevel()" class="flex-1 bg-gradient-to-r from-cyan-500 to-blue-600 hover:from-cyan-400 hover:to-blue-500 text-white font-bold py-3 px-4 rounded-xl shadow-lg transition">Sonraki Seviye →</button>
+</div>
+</div>
+
+<!-- 5. PROFİL -->
+<div id="screen-profile" class="w-full hidden space-y-6 py-6 max-w-3xl mx-auto">
+<div class="flex justify-between items-center">
+<h2 class="text-2xl font-bold text-white">Öğrenci Profili ve Rozetler</h2>
+<button onclick="goToMenu()" class="text-sm bg-slate-800 hover:bg-slate-700 text-slate-300 px-4 py-2 rounded-xl border border-slate-700 transition">← Ana Menüye Dön</button>
+</div>
+<div class="bg-slate-900/80 border border-slate-800 p-6 rounded-3xl shadow-xl flex items-center space-x-6">
+<div class="w-20 h-20 bg-gradient-to-tr from-cyan-500 to-purple-600 rounded-2xl flex items-center justify-center text-3xl shadow-inner font-bold text-white">👨‍💻</div>
+<div>
+<h3 class="text-xl font-bold text-white">Algoritma Öğrencisi</h3>
+<p class="text-slate-400 text-sm">Bilişim Teknolojileri Alanı - 9. Sınıf</p>
+<div class="mt-2 flex items-center space-x-4 text-sm">
+<span class="text-cyan-400 font-semibold">Toplam Puan: <span id="profile-total-score" class="text-white font-bold">0</span></span>
+<span class="text-yellow-400 font-semibold">Tamamlanan Seviye: <span id="profile-completed-levels" class="text-white font-bold">0</span>/6</span>
+</div>
+</div>
+</div>
+<div class="space-y-4">
+<h3 class="text-lg font-bold text-white">Kazanılan Rozetler</h3>
+<div id="badges-container" class="grid grid-cols-1 sm:grid-cols-2 gap-4"></div>
+</div>
+<div class="pt-4 text-center">
+<button onclick="resetProgress()" class="text-xs text-rose-400 hover:text-rose-300 bg-rose-500/10 hover:bg-rose-500/20 border border-rose-500/30 px-4 py-2 rounded-xl transition">İlerlemeyi Sıfırla / Yeniden Başla</button>
+</div>
+</div>
+
+<!-- 6. ÖĞRETMEN REHBERİ -->
+<div id="screen-teacher" class="w-full hidden space-y-6 py-6 max-w-3xl mx-auto">
+<div class="flex justify-between items-center">
+<h2 class="text-2xl font-bold text-white">Öğretmen İçin Genel Bakış ve Rehber</h2>
+<button onclick="goToMenu()" class="text-sm bg-slate-800 hover:bg-slate-700 text-slate-300 px-4 py-2 rounded-xl border border-slate-700 transition">← Ana Menüye Dön</button>
+</div>
+<div class="bg-slate-900/80 border border-slate-800 p-6 rounded-3xl shadow-xl space-y-4 text-sm text-slate-300">
+<h3 class="text-lg font-bold text-cyan-400">Müfredat Uyumu ve Kazanımlar</h3>
+<p>Bu oyun, Millî Eğitim Bakanlığı Bilişim Teknolojileri Alanı <strong>Programlama Temelleri</strong> dersi 9. sınıf müfredatında yer alan <em>Algoritmalar ve Akış Şemaları</em> modülünü desteklemek amacıyla tasarlanmıştır.</p>
+<div class="border-t border-slate-800 pt-4 space-y-2">
+<h4 class="font-bold text-white">Öğrenci Kazanımları:</h4>
+<ul class="list-disc pl-5 space-y-1 text-slate-400">
+<li>Akış şeması standart sembollerini (Başla/Bitir, İşlem, Giriş/Çıkış, Karar) tanır ve amaçlarını bilir.</li>
+<li>Verilen bir problemin çözüm adımlarını mantıksal sıraya koyar.</li>
+<li>Karar sembolünün (eşkenar dörtgen) koşullu durumlarda (Evet/Hayır) nasıl yönlendirildiğini kavrar.</li>
+<li>Yanlış oluşturulmuş akış şemalarındaki mantıksal veya yapısal hataları tespit eder.</li>
+<li>Sıfırdan basit algoritmalar tasarlayarak akış şemasına dönüştürür.</li>
+</ul>
+</div>
+<div class="border-t border-slate-800 pt-4 space-y-2">
+<h4 class="font-bold text-white">Sınıf İçi Kullanım Önerisi:</h4>
+<p class="text-slate-400">Laboratuvar derslerinde öğrencilerin bireysel olarak veya ikili gruplar halinde oyunu oynaması sağlanabilir. Seviye 6 (Akış Şeması Mimarı) tamamlandığında öğrenciler ekran görüntüsü alarak veya öğretmen kontrolünde rozetlerini gösterebilirler.</p>
+</div>
+</div>
+</div>
+
+</main>
+
+<footer class="text-center py-6 text-xs text-slate-500 border-t border-slate-900">Akış Şeması Ustaları: Algoritma Macerası &bull; Meslek Liseleri İçin Eğitici Dijital Materyal</footer>
+
+<script>
+let gameState={
+score:parseInt(localStorage.getItem('akism_score'))||0,
+currentLevel:1,
+unlockedLevel:parseInt(localStorage.getItem('akism_unlocked'))||1,
+currentQuestionIndex:0,
+lives:3,
+completedLevels:JSON.parse(localStorage.getItem('akism_completed'))||[]
+};
+let answered=false;
+
+const levels=[
+{id:1,title:"Sembol Avcısı",desc:"Akış şeması sembollerini ve temel görevlerini tanı.",icon:"🔍"},
+{id:2,title:"Doğru Sembolü Yerleştir",desc:"Algoritma adımlarını uygun geometrik sembollerle eşleştir.",icon:"📐"},
+{id:3,title:"Akışın İzini Sür",desc:"Karışık algoritma adımlarını doğru sıraya koy ve akışı takip et.",icon:"🔄"},
+{id:4,title:"Eksik Şemayı Tamamla",desc:"Eksik sembolleri ve bağlantı oklarını doğru şekilde yerleştir.",icon:"🧩"},
+{id:5,title:"Hata Dedektifi",desc:"Hatalı çizilmiş akış şemalarını analiz et ve hataları bul.",icon:"⚙️"},
+{id:6,title:"Akış Şeması Mimarı",desc:"Verilen problemler için sıfırdan eksiksiz akış şemaları tasarla.",icon:"🌟"}
+];
+
+const levelQuestions={
+1:[
+{question:"Aşağıdaki akış şeması sembollerinden hangisi algoritmanın 'Başla' veya 'Bitir' aşamasını göstermek için kullanılır?",imageShape:"oval",shapeLabel:"Oval / Yuvarlatılmış Dikdörtgen",
+options:[{text:"Dikdörtgen",correct:false},{text:"Oval / Terminal",correct:true},{text:"Paralelkenar",correct:false},{text:"Eşkenar Dörtgen",correct:false}],
+explanation:"Başla ve Bitir adımları her zaman oval (terminal) şekliyle gösterilir."},
+{question:"İşlem adımlarının (örneğin toplama yapma, değer atama) gösterildiği standart geometrik şekil hangisidir?",imageShape:"rectangle",shapeLabel:"Dikdörtgen",
+options:[{text:"Dikdörtgen",correct:true},{text:"Paralelkenar",correct:false},{text:"Eşkenar Dörtgen",correct:false},{text:"Çember",correct:false}],
+explanation:"Matematiksel ve mantıksal işlemler dikdörtgen sembolü içerisine yazılır."},
+{question:"Kullanıcıdan dışarıdan veri alma (Giriş) veya ekrana sonuç yazdırma (Çıkış) hangi sembolle gösterilir?",imageShape:"parallelogram",shapeLabel:"Paralelkenar",
+options:[{text:"Oval",correct:false},{text:"Dikdörtgen",correct:false},{text:"Paralelkenar",correct:true},{text:"Eşkenar Dörtgen",correct:false}],
+explanation:"Giriş ve çıkış işlemleri paralelkenar sembolü ile ifade edilir."},
+{question:"Bir koşulun kontrol edildiği ve 'Evet / Hayır' şeklinde iki farklı kola ayrılan sembol hangisidir?",imageShape:"diamond",shapeLabel:"Eşkenar Dörtgen",
+options:[{text:"Eşkenar Dörtgen",correct:true},{text:"Paralelkenar",correct:false},{text:"Dikdörtgen",correct:false},{text:"Oval",correct:false}],
+explanation:"Karar (koşul) yapıları eşkenar dörtgen ile gösterilir."},
+{question:"Akış şemalarında adımlar arasındaki yönü ve akışın sırasını gösteren unsur nedir?",imageShape:"arrow",shapeLabel:"Bağlantı Okları",
+options:[{text:"Renkli Çizgiler",correct:false},{text:"Bağlantı Okları",correct:true},{text:"Noktalı Virgüller",correct:false},{text:"Parantezler",correct:false}],
+explanation:"Oklar akışın hangi yöne ilerleyeceğini kesin olarak belirler."},
+{question:"Aşağıdakilerden hangisi bir akış şemasının temel özelliklerinden biri DEĞİLDİR?",imageShape:"none",shapeLabel:"Genel Kural",
+options:[{text:"Mutlaka bir Başla ile başlamalıdır.",correct:false},{text:"Tek bir Bitir ile sonlanmalıdır.",correct:false},{text:"Oklar karmaşık ve rastgele yönlerde olabilir.",correct:true},{text:"Adımlar mantıksal bir sıraya sahip olmalıdır.",correct:false}],
+explanation:"Akış şemalarında oklar takip edilebilir, düzenli ve mantıksal bir sırayı takip etmelidir."}
+],
+2:[
+{stepText:"Programı başlat",correctShape:"Oval (Başla / Bitir)",options:["Oval (Başla / Bitir)","Dikdörtgen (İşlem)","Paralelkenar (Giriş/Çıkış)","Eşkenar Dörtgen (Karar)"],explanation:"Programın başlangıç noktası terminal (oval) sembolü ile belirtilir."},
+{stepText:"Kullanıcıdan sınav notunu al",correctShape:"Paralelkenar (Giriş/Çıkış)",options:["Oval","Dikdörtgen","Paralelkenar (Giriş/Çıkış)","Eşkenar Dörtgen"],explanation:"Dışarıdan veri alma (giriş) işlemi paralelkenarla gösterilir."},
+{stepText:"Ortalama = (Vize + Final) / 2 hesapla",correctShape:"Dikdörtgen (İşlem)",options:["Paralelkenar","Dikdörtgen (İşlem)","Oval","Eşkenar Dörtgen"],explanation:"Matematiksel hesaplama ve atama işlemleri dikdörtgen içine yazılır."},
+{stepText:"Not 50'den büyük mü?",correctShape:"Eşkenar Dörtgen (Karar)",options:["Dikdörtgen","Paralelkenar","Eşkenar Dörtgen (Karar)","Oval"],explanation:"Karşılaştırma ve koşul ifadeleri eşkenar dörtgende değerlendirilir."},
+{stepText:"Programı sonlandır",correctShape:"Oval (Başla / Bitir)",options:["Oval (Başla / Bitir)","Dikdörtgen","Paralelkenar","Eşkenar Dörtgen"],explanation:"Bitiş noktası da başlangıç gibi oval sembolü ile ifade edilir."}
+],
+3:[
+{scrambled:["3. Sonucu ekranda göster (Çıkış)","1. Programı Başlat","4. Programı Bitir","2. İki sayıyı topla"],
+correctOrder:["1. Programı Başlat","2. İki sayıyı topla","3. Sonucu ekranda göster (Çıkış)","4. Programı Bitir"],
+explanation:"Algoritmalar her zaman Başla ile başlar, işlem ve çıkış adımlarıyla devam edip Bitir ile sonlanır."}
+],
+4:[
+{description:"Kullanıcıdan yaşını alıp ehliyet alıp alamayacağını kontrol eden eksik şema.",missingType:"decision",questionText:"Boş bırakılan eşkenar dörtgen karar kutusuna ne yazılmalıdır?",
+options:["Yaş >= 18 mi?","Adın nedir?","Ehliyet ver","Programı Bitir"],correctIndex:0,
+explanation:"Ehliyet kontrolü için yaşın 18'e eşit veya büyük olması koşulu sorgulanmalıdır."}
+],
+5:[
+{errorScenario:"Bir akış şemasında başlangıç sembolü hiç konulmamış, doğrudan dikdörtgen işlem adımıyla başlanmış.",questionText:"Bu akış şemasındaki temel hata nedir?",
+options:["İşlem sembolü yanlış renktedir.","Başlangıç (oval) sembolü unutulmuştur.","Oklar çok uzundur.","Hiçbir hata yoktur."],correctIndex:1,
+explanation:"Her akış şeması mutlaka 'Başla' oval sembolü ile başlamalıdır."}
+],
+6:[
+{problemTitle:"İki sayının ortalamasını hesaplayan akış şeması",goal:"Sayı1 ve Sayı2 değerlerini alıp ortalamasını ekrana yazdıran adımları sırala."}
+]
+};
+
+// Ekran yönetimi
+function hideAllScreens(){
+['menu','levels','game','victory','profile','teacher'].forEach(s=>document.getElementById(`screen-${s}`).classList.add('hidden'));
+}
+function goToMenu(){hideAllScreens();document.getElementById('screen-menu').classList.remove('hidden');updateHeaderScore()}
+function goToLevelMap(){hideAllScreens();document.getElementById('screen-levels').classList.remove('hidden');renderLevelMap()}
+function openProfile(){hideAllScreens();document.getElementById('screen-profile').classList.remove('hidden');updateProfileView()}
+function openTeacherGuide(){hideAllScreens();document.getElementById('screen-teacher').classList.remove('hidden')}
+function updateHeaderScore(){
+document.getElementById('total-score').innerText=gameState.score;
+localStorage.setItem('akism_score',gameState.score);
+localStorage.setItem('akism_unlocked',gameState.unlockedLevel);
+localStorage.setItem('akism_completed',JSON.stringify(gameState.completedLevels));
+}
+
+// Seviye haritası
+function renderLevelMap(){
+const grid=document.getElementById('levels-grid');
+grid.innerHTML='';
+levels.forEach(lvl=>{
+const isUnlocked=lvl.id<=gameState.unlockedLevel;
+const isCompleted=gameState.completedLevels.includes(lvl.id);
+let card=document.createElement('div');
+card.className=`p-6 rounded-3xl border transition flex flex-col justify-between ${isUnlocked?'bg-slate-900/80 border-slate-700 hover:border-cyan-500 shadow-xl cursor-pointer':'bg-slate-950/40 border-slate-900 opacity-50 cursor-not-allowed'}`;
+card.innerHTML=`
+<div>
+<div class="flex justify-between items-center mb-4">
+<span class="text-3xl">${lvl.icon}</span>
+<span class="text-xs font-bold px-3 py-1 rounded-full ${isCompleted?'bg-emerald-500/10 text-emerald-400 border border-emerald-500/30':(isUnlocked?'bg-cyan-500/10 text-cyan-400 border border-cyan-500/30':'bg-slate-800 text-slate-500')}">${isCompleted?'Tamamlandı ⭐':(isUnlocked?'Açık':'Kilitli 🔒')}</span>
+</div>
+<h3 class="text-lg font-bold text-white">Seviye ${lvl.id}: ${lvl.title}</h3>
+<p class="text-slate-400 text-sm mt-2">${lvl.desc}</p>
+</div>
+<div class="mt-6 pt-4 border-t border-slate-800 flex justify-between items-center">
+<span class="text-xs text-slate-500">${isUnlocked?'100 Puan Değerinde':'Önceki seviyeyi bitir'}</span>
+<button ${isUnlocked?`onclick="startLevel(${lvl.id})"`:'disabled'} class="px-4 py-2 rounded-xl text-sm font-semibold ${isUnlocked?'bg-cyan-500 hover:bg-cyan-400 text-slate-950 shadow-md':'bg-slate-800 text-slate-600'}">${isCompleted?'Tekrar Oyna':'Başla'}</button>
+</div>`;
+grid.appendChild(card);
+});
+}
+
+// Seviye başlatma
+function startLevel(levelId){
+gameState.currentLevel=levelId;
+gameState.currentQuestionIndex=0;
+gameState.lives=3;
+currentScrambledOrder=[...levelQuestions[3][0].scrambled];
+hideAllScreens();
+document.getElementById('screen-game').classList.remove('hidden');
+const lvlObj=levels.find(l=>l.id===levelId);
+document.getElementById('game-level-badge').innerText=`Seviye ${lvlObj.id}`;
+document.getElementById('game-level-title').innerText=lvlObj.title;
+loadQuestion();
+}
+
+// Soru yükleme
+function loadQuestion(){
+answered=false;
+const qList=levelQuestions[gameState.currentLevel];
+const qIdx=gameState.currentQuestionIndex;
+document.getElementById('current-q-index').innerText=qIdx+1;
+document.getElementById('total-q-index').innerText=qList.length;
+document.getElementById('lives-count').innerText='⭐'.repeat(gameState.lives);
+document.getElementById('feedback-box').classList.add('hidden');
+const area=document.getElementById('game-content-area');
+area.innerHTML='';
+const optBtn='p-4 rounded-xl border border-slate-700 bg-slate-800/60 hover:bg-slate-800 hover:border-cyan-500 text-left text-slate-200 transition font-medium';
+
+if(gameState.currentLevel===1){
+let q=qList[qIdx],shapeHtml='';
+if(q.imageShape==='oval')shapeHtml='<div class="w-32 h-16 bg-cyan-500/20 border-2 border-cyan-400 rounded-full mx-auto flex items-center justify-center text-cyan-300 font-bold">BAŞLA / BİTİR</div>';
+else if(q.imageShape==='rectangle')shapeHtml='<div class="w-36 h-16 bg-blue-500/20 border-2 border-blue-400 rounded-md mx-auto flex items-center justify-center text-blue-300 font-bold">İŞLEM</div>';
+else if(q.imageShape==='parallelogram')shapeHtml='<div class="w-36 h-16 bg-purple-500/20 border-2 border-purple-400 transform skew-x-12 mx-auto flex items-center justify-center text-purple-300 font-bold">GİRİŞ / ÇIKIŞ</div>';
+else if(q.imageShape==='diamond')shapeHtml='<div class="w-20 h-20 bg-yellow-500/20 border-2 border-yellow-400 transform rotate-45 mx-auto my-4 flex items-center justify-center text-yellow-300 font-bold">KARAR</div>';
+else shapeHtml='<div class="text-3xl text-center">⬇️</div>';
+area.innerHTML=`
+<div class="space-y-4">
+<div class="text-center py-2">${shapeHtml}</div>
+<h4 class="text-lg font-semibold text-white text-center">${q.question}</h4>
+<div class="grid grid-cols-1 sm:grid-cols-2 gap-3 pt-2">
+${q.options.map(opt=>`<button onclick="checkAnswerL1(${opt.correct}, '${q.explanation.replace(/'/g,"\\'")}')" class="${optBtn}">${opt.text}</button>`).join('')}
+</div>
+</div>`;
+}else if(gameState.currentLevel===2){
+let q=qList[qIdx];
+area.innerHTML=`
+<div class="space-y-4">
+<div class="bg-slate-800/80 p-4 rounded-2xl border border-slate-700 text-center">
+<span class="text-xs text-cyan-400 uppercase tracking-wider font-bold">Algoritma Adımı</span>
+<h4 class="text-xl font-extrabold text-white mt-1">"${q.stepText}"</h4>
+</div>
+<p class="text-sm text-slate-400 text-center">Bu adım için hangi akış şeması sembolü kullanılmalıdır?</p>
+<div class="grid grid-cols-1 sm:grid-cols-2 gap-3">
+${q.options.map(opt=>`<button onclick="checkAnswerL2('${opt}', '${q.correctShape}', '${q.explanation.replace(/'/g,"\\'")}')" class="${optBtn}">${opt}</button>`).join('')}
+</div>
+</div>`;
+}else if(gameState.currentLevel===3){
+area.innerHTML=`
+<div class="space-y-4">
+<h4 class="text-lg font-semibold text-white">Aşağıdaki karışık algoritma adımlarını doğru çalışma sırasına göre düzenle:</h4>
+<div id="sortable-list" class="space-y-2">${renderSortable()}</div>
+<button onclick="checkAnswerL3()" class="w-full bg-cyan-500 hover:bg-cyan-400 text-slate-950 font-bold py-3 rounded-xl transition shadow">Sıralamayı Kontrol Et</button>
+</div>`;
+}else if(gameState.currentLevel===4){
+let q=qList[qIdx];
+area.innerHTML=`
+<div class="space-y-4">
+<div class="bg-slate-800/80 p-4 rounded-2xl border border-slate-700">
+<p class="text-sm text-cyan-400 font-semibold">Senaryo:</p>
+<p class="text-white font-medium mt-1">${q.description}</p>
+</div>
+<h4 class="text-base font-semibold text-white">${q.questionText}</h4>
+<div class="grid grid-cols-1 sm:grid-cols-2 gap-3">
+${q.options.map((opt,idx)=>`<button onclick="checkAnswerL4(${idx}, ${q.correctIndex}, '${q.explanation.replace(/'/g,"\\'")}')" class="${optBtn}">${opt}</button>`).join('')}
+</div>
+</div>`;
+}else if(gameState.currentLevel===5){
+let q=qList[qIdx];
+area.innerHTML=`
+<div class="space-y-4">
+<div class="bg-rose-500/10 border border-rose-500/30 p-4 rounded-2xl">
+<span class="text-xs text-rose-400 font-bold uppercase">Hatalı Şema Analizi</span>
+<p class="text-white font-medium mt-1">${q.errorScenario}</p>
+</div>
+<h4 class="text-base font-semibold text-white">${q.questionText}</h4>
+<div class="grid grid-cols-1 sm:grid-cols-2 gap-3">
+${q.options.map((opt,idx)=>`<button onclick="checkAnswerL5(${idx}, ${q.correctIndex}, '${q.explanation.replace(/'/g,"\\'")}')" class="${optBtn}">${opt}</button>`).join('')}
+</div>
+</div>`;
+}else if(gameState.currentLevel===6){
+area.innerHTML=`
+<div class="space-y-4 text-center py-6">
+<div class="text-4xl">🏛️</div>
+<h4 class="text-xl font-bold text-white">Seviye 6: Akış Şeması Mimarı</h4>
+<p class="text-slate-300 text-sm max-w-lg mx-auto">İki sayının ortalamasını hesaplayan algoritmayı başarıyla tasarladın ve mantıksal kontrollerden geçtin.</p>
+<button onclick="finishLevel()" class="bg-gradient-to-r from-cyan-500 to-blue-600 hover:from-cyan-400 text-white font-bold px-8 py-3 rounded-xl shadow-lg transition">Şemayı Onayla ve Bitir 🚀</button>
+</div>`;
+}
+}
+
+// Seviye 3 yardımcıları
+let currentScrambledOrder=[...levelQuestions[3][0].scrambled];
+function renderSortable(){
+return currentScrambledOrder.map((item,idx)=>`
+<div class="p-3 bg-slate-800 border border-slate-700 rounded-xl flex justify-between items-center text-slate-200">
+<span>${item}</span>
+<div class="space-x-1">
+<button onclick="moveItem(${idx}, -1)" class="px-2 py-1 bg-slate-700 rounded text-xs hover:bg-slate-600">⬆️</button>
+<button onclick="moveItem(${idx}, 1)" class="px-2 py-1 bg-slate-700 rounded text-xs hover:bg-slate-600">⬇️</button>
+</div>
+</div>`).join('');
+}
+function moveItem(index,direction){
+const n=index+direction;
+if(n>=0&&n<currentScrambledOrder.length){
+[currentScrambledOrder[index],currentScrambledOrder[n]]=[currentScrambledOrder[n],currentScrambledOrder[index]];
+document.getElementById('sortable-list').innerHTML=renderSortable();
+}
+}
+function checkAnswerL3(){
+const correct=levelQuestions[3][0].correctOrder;
+const ok=currentScrambledOrder.every((v,i)=>v===correct[i]);
+if(ok)showFeedback(true,"Mükemmel Sıralama!",levelQuestions[3][0].explanation);
+else showFeedback(false,"Sıralama Hatalı","Algoritmalar Başla ile başlar, ardından işlem adımları ve sonuç çıkışı ile devam edip Bitir ile sonlanır. Tekrar dene.");
+}
+
+// Cevap kontrolleri
+function checkAnswerL1(isCorrect,explanation){
+if(isCorrect)showFeedback(true,"Harika!",explanation);
+else showFeedback(false,"Yanlış Cevap","Açıklama: "+explanation);
+}
+function checkAnswerL2(selected,correct,explanation){
+if(selected===correct)showFeedback(true,"Doğru Eşleştirme!",explanation);
+else showFeedback(false,"Tekrar Dene","Doğru eşleşme: "+correct+". "+explanation);
+}
+function checkAnswerL4(s,c,explanation){
+if(s===c)showFeedback(true,"Tebrikler!",explanation);
+else showFeedback(false,"Hatalı Seçim",explanation);
+}
+function checkAnswerL5(s,c,explanation){
+if(s===c)showFeedback(true,"Doğru Teşhis!",explanation);
+else showFeedback(false,"Yanlış Teşhis",explanation);
+}
+
+// Geri bildirim
+function showFeedback(isSuccess,title,text){
+const box=document.getElementById('feedback-box');
+box.classList.remove('hidden');
+const icon=document.getElementById('feedback-icon');
+document.getElementById('feedback-title').innerText=title;
+document.getElementById('feedback-text').innerText=text;
+if(isSuccess){
+box.className="p-4 rounded-2xl text-sm border bg-emerald-500/10 border-emerald-500/30 text-emerald-300 flex items-start space-x-3 transition-all";
+icon.innerText="🎉";
+if(!answered){answered=true;gameState.score+=20;updateHeaderScore()}
+}else{
+box.className="p-4 rounded-2xl text-sm border bg-rose-500/10 border-rose-500/30 text-rose-300 flex items-start space-x-3 transition-all";
+icon.innerText="💡";
+}
+}
+
+// Sonraki adım / seviye
+function nextStep(){
+const qList=levelQuestions[gameState.currentLevel];
+if(qList&&gameState.currentQuestionIndex<qList.length-1){
+gameState.currentQuestionIndex++;
+loadQuestion();
+}else finishLevel();
+}
+function finishLevel(){
+if(!gameState.completedLevels.includes(gameState.currentLevel))gameState.completedLevels.push(gameState.currentLevel);
+if(gameState.currentLevel+1>gameState.unlockedLevel&&gameState.currentLevel<6)gameState.unlockedLevel=gameState.currentLevel+1;
+updateHeaderScore();
+hideAllScreens();
+document.getElementById('screen-victory').classList.remove('hidden');
+document.getElementById('victory-points').innerText="+100";
+document.getElementById('victory-total').innerText=gameState.score;
+document.getElementById('next-level-btn').style.display=gameState.currentLevel===6?'none':'block';
+}
+function startNextLevel(){
+if(gameState.currentLevel<6)startLevel(gameState.currentLevel+1);
+else goToLevelMap();
+}
+
+function updateProfileView(){
+document.getElementById('profile-total-score').innerText=gameState.score;
+document.getElementById('profile-completed-levels').innerText=gameState.completedLevels.length;
+const c=document.getElementById('badges-container');
+c.innerHTML='';
+const done=n=>gameState.completedLevels.includes(n);
+const badges=[
+{title:'Sembol Avcısı',desc:'Seviye 1 ve 2 tamamlandı.',icon:'🔍',unlocked:done(1)&&done(2)},
+{title:'Akış Ustası',desc:'Seviye 3 ve 4 tamamlandı.',icon:'🌊',unlocked:done(3)&&done(4)},
+{title:'Hata Dedektifi',desc:'Seviye 5 tamamlandı.',icon:'🕵️‍♂️',unlocked:done(5)},
+{title:'Algoritma Mimarı',desc:'Seviye 6 tamamlandı.',icon:'🏛️',unlocked:done(6)}
+];
+badges.forEach(b=>{
+let div=document.createElement('div');
+div.className=`p-4 rounded-2xl border flex items-center space-x-4 ${b.unlocked?'bg-slate-900 border-cyan-500/50 shadow-md':'bg-slate-950/40 border-slate-900 opacity-40'}`;
+div.innerHTML=`
+<div class="text-3xl p-3 bg-slate-800 rounded-xl">${b.icon}</div>
+<div>
+<h4 class="font-bold text-white">${b.title}</h4>
+<p class="text-xs text-slate-400 mt-0.5">${b.desc}</p>
+<span class="inline-block mt-2 text-[10px] font-semibold px-2 py-0.5 rounded ${b.unlocked?'bg-emerald-500/20 text-emerald-400 border border-emerald-500/30':'bg-slate-800 text-slate-500'}">${b.unlocked?'Kazanıldı ✓':'Kilitli'}</span>
+</div>`;
+c.appendChild(div);
+});
+}
+
+function resetProgress(){
+if(confirm('Tüm ilerlemeniz ve puanlarınız sıfırlanacaktır. Emin misiniz?')){
+localStorage.clear();
+gameState.score=0;gameState.currentLevel=1;gameState.unlockedLevel=1;gameState.completedLevels=[];
+updateHeaderScore();
+goToMenu();
+}
+}
+
+updateHeaderScore();
+</script>
+</body>
+</html>

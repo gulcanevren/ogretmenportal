@@ -1,0 +1,338 @@
+<!DOCTYPE html>
+<html xmlns:o='urn:schemas-microsoft-com:office:office' xmlns:w='urn:schemas-microsoft-com:office:word' xmlns='http://www.w3.org/TR/REC-html40'>
+<head>
+<meta charset='utf-8'>
+<title>Programlama Temelleri 4. Hafta: Sözde Kod ve Karar Yapıları</title>
+<!--[if gte mso 9]>
+<xml>
+<w:WordDocument>
+<w:View>Print</w:View>
+<w:Zoom>100</w:Zoom>
+<w:DoNotOptimizeForBrowser/>
+</w:WordDocument>
+</xml>
+<![endif]-->
+<style>
+@page {
+    size: A4 portrait;
+    margin: 2cm 2cm 2cm 2cm;
+}
+body {
+    font-family: 'Calibri', 'Segoe UI', Arial, sans-serif;
+    font-size: 11pt;
+    line-height: 1.5;
+    color: #1e293b;
+    background-color: #ffffff;
+}
+h1 {
+    font-size: 18pt;
+    color: #1e3a8a;
+    border-bottom: 2pt solid #2563eb;
+    padding-bottom: 6px;
+    margin-top: 10px;
+    margin-bottom: 12px;
+}
+h2 {
+    font-size: 14pt;
+    color: #1d4ed8;
+    margin-top: 18px;
+    margin-bottom: 8px;
+    border-bottom: 1pt solid #cbd5e1;
+    padding-bottom: 4px;
+}
+h3 {
+    font-size: 12pt;
+    color: #334155;
+    margin-top: 14px;
+    margin-bottom: 6px;
+}
+p {
+    margin-bottom: 8px;
+}
+.header-box {
+    background-color: #f1f5f9;
+    border: 1pt solid #cbd5e1;
+    border-left: 4pt solid #2563eb;
+    padding: 10px 14px;
+    margin-bottom: 16px;
+}
+.header-box table {
+    width: 100%;
+    border-collapse: collapse;
+}
+.header-box td {
+    padding: 3px 6px;
+    font-size: 10pt;
+}
+table.data-table {
+    width: 100%;
+    border-collapse: collapse;
+    margin: 12px 0;
+}
+table.data-table th, table.data-table td {
+    border: 1pt solid #94a3b8;
+    padding: 6px 10px;
+    font-size: 10pt;
+}
+table.data-table th {
+    background-color: #e2e8f0;
+    color: #0f172a;
+    font-weight: bold;
+    text-align: left;
+}
+.code-box {
+    background-color: #0f172a;
+    color: #f8fafc;
+    font-family: 'Consolas', 'Courier New', monospace;
+    font-size: 10pt;
+    padding: 10px 14px;
+    border-radius: 4px;
+    margin: 10px 0;
+    white-space: pre-wrap;
+    line-height: 1.4;
+}
+.note-box {
+    background-color: #eff6ff;
+    border-left: 3pt solid #3b82f6;
+    padding: 8px 12px;
+    margin: 10px 0;
+    font-size: 10pt;
+}
+.warn-box {
+    background-color: #fffbeb;
+    border-left: 3pt solid #f59e0b;
+    padding: 8px 12px;
+    margin: 10px 0;
+    font-size: 10pt;
+}
+</style>
+</head>
+<body>
+
+<div class="header-box">
+    <table>
+        <tr>
+            <td><strong>DERS:</strong> Programlama Temelleri</td>
+            <td><strong>DÖNEM / HAFTA:</strong> 2026-2027 / 4. Hafta</td>
+        </tr>
+        <tr>
+            <td><strong>DERS ÖĞRETMENİ:</strong> Gülcan Vatansever</td>
+            <td><strong>SINIF / ALAN:</strong> 9. Sınıf Bilişim Teknolojileri</td>
+        </tr>
+        <tr>
+            <td colspan="2"><strong>KONU:</strong> Sözde Kod (Pseudocode), Değişken Takibi, Karar Yapıları (EĞER-DEĞİLSE) ve Döngü Mantığı</td>
+        </tr>
+    </table>
+</div>
+
+<h1>4. HAFTA DERS NOTLARI: SÖZDE KOD VE KARAR YAPILARI</h1>
+
+<h2>1. Sözde Kod (Pseudocode) Nedir?</h2>
+<p>
+    <strong>Sözde kod (Pseudocode);</strong> bir algoritmanın belirli bir programlama dilinin (Python, C#, Java vb.) katı sözdizimi (syntax) kurallarına bağlı kalmaksızın, günlük konuşma diline yakın, anlaşılır ve yapısal ifadelerle adım adım yazılmasıdır.
+</p>
+<p>
+    Sözde kod, yazılımcı ile algoritma arasındaki en önemli köprüdür. Programcı kodlamaya geçmeden önce mantıksal hataları sözde kod üzerinde tespit eder.
+</p>
+
+<h3>Sözde Kodun Temel Kuralları:</h3>
+<ul>
+    <li>Her algoritma mutlaka <strong>BAŞLA.</strong> adımı ile başlar.</li>
+    <li>Her algoritma mutlaka <strong>DUR.</strong> adımı ile son bulur.</li>
+    <li>Adımlar sıralı, mantıklı ve kesin olmalıdır. Her satır tek bir işi yapmalıdır.</li>
+    <li>Girdi, işlem, karar, döngü ve çıktı bölümleri açıkça ayırt edilmelidir.</li>
+</ul>
+
+<h2>2. Bir Algoritmanın 5 Temel Bileşeni</h2>
+<table class="data-table">
+    <tr>
+        <th style="width: 15%;">Bileşen</th>
+        <th style="width: 35%;">Açıklama</th>
+        <th style="width: 50%;">Sözde Kod Örneği</th>
+    </tr>
+    <tr>
+        <td><strong>1. Girdi (Input)</strong></td>
+        <td>Kullanıcıdan veya dış ortamdan veri alma işlemi.</td>
+        <td><code>Sayı1 değerini kullanıcıdan al.</code> veya <code>S1 değerini oku.</code></td>
+    </tr>
+    <tr>
+        <td><strong>2. İşlem (Process)</strong></td>
+        <td>Matematiksel hesaplama yapma veya değişkene değer atama.</td>
+        <td><code>Toplam = S1 + S2</code> veya <code>Sayac = Sayac + 1</code></td>
+    </tr>
+    <tr>
+        <td><strong>3. Karar (Condition)</strong></td>
+        <td>Koşula göre algoritmanın farklı yollardan ilerlemesi.</td>
+        <td><code>EĞER Sayi > 0 İSE ... DEĞİLSE ...</code></td>
+    </tr>
+    <tr>
+        <td><strong>4. Döngü (Loop)</strong></td>
+        <td>Belirli bir şart sağlandığı sürece adımların tekrarlanması.</td>
+        <td><code>ADIM 3'e GİT.</code> (Şart sağlanana kadar tekrarla)</td>
+    </tr>
+    <tr>
+        <td><strong>5. Çıktı (Output)</strong></td>
+        <td>Hesaplanan sonucun veya mesajın ekrana yazdırılması.</td>
+        <td><code>Toplam değerini ekrana yazdır.</code></td>
+    </tr>
+</table>
+
+<h2>3. Karşılaştırma Operatörleri</h2>
+<div class="warn-box">
+    <strong>DİKKAT:</strong> Programlamada tek eşittir (<code>=</code>) bir <strong>atama</strong> operatörüdür; sağdaki değeri soldaki değişkene yazar (Örn: <code>X = 10</code>). Çift eşittir (<code>==</code>) ise bir <strong>karşılaştırma</strong> operatörüdür; iki değerin birbirine eşit olup olmadığını sorgular (Örn: <code>X == 10</code>).
+</div>
+
+<table class="data-table">
+    <tr>
+        <th>Operatör</th>
+        <th>Anlamı</th>
+        <th>Örnek</th>
+        <th>Sonuç (True / False)</th>
+    </tr>
+    <tr>
+        <td><code>==</code></td>
+        <td>Eşit mi?</td>
+        <td><code>10 == 10</code></td>
+        <td>DOĞRU (True)</td>
+    </tr>
+    <tr>
+        <td><code>!=</code></td>
+        <td>Eşit değil mi? (Farklı mı?)</td>
+        <td><code>10 != 5</code></td>
+        <td>DOĞRU (True)</td>
+    </tr>
+    <tr>
+        <td><code>&gt;</code></td>
+        <td>Büyük mü?</td>
+        <td><code>15 &gt; 20</code></td>
+        <td>YANLIŞ (False)</td>
+    </tr>
+    <tr>
+        <td><code>&lt;</code></td>
+        <td>Küçük mü?</td>
+        <td><code>8 &lt; 12</code></td>
+        <td>DOĞRU (True)</td>
+    </tr>
+    <tr>
+        <td><code>&gt;=</code></td>
+        <td>Büyük veya eşit mi?</td>
+        <td><code>18 &gt;= 18</code></td>
+        <td>DOĞRU (True)</td>
+    </tr>
+    <tr>
+        <td><code>&lt;=</code></td>
+        <td>Küçük veya eşit mi?</td>
+        <td><code>25 &lt;= 20</code></td>
+        <td>YANLIŞ (False)</td>
+    </tr>
+</table>
+
+<h2>4. Karar Yapıları: EĞER – DEĞİLSE (If - Else)</h2>
+<p>
+    Karar mekanizması, bir koşulun sonucunun DOĞRU (True) veya YANLIŞ (False) olmasına göre programın akışını dallara ayırır.
+</p>
+
+<h3>Örnek 1: Şifre Kontrol Algoritması</h3>
+<div class="code-box">ADIM 1: BAŞLA.
+ADIM 2: sifre = "1234"
+ADIM 3: Kullanıcıdan bir şifre tahmini al (tahmin).
+ADIM 4: EĞER tahmin == sifre İSE
+             "Giriş Başarılı, Hoş Geldiniz!" yazdır.
+             ADIM 7'ye GİT.
+ADIM 5: DEĞİLSE
+             "Hatalı şifre girdiniz, tekrar deneyiniz!" yazdır.
+             ADIM 3'e GİT. (Döngü)
+ADIM 6: DUR.</div>
+
+<h3>Örnek 2: Yaş ve Ehliyet Uygunluk Algoritması</h3>
+<div class="code-box">ADIM 1: BAŞLA.
+ADIM 2: Sistem yılı (ST) değerini oku (Örn: 2026).
+ADIM 3: Doğum yılı (DY) değerini kullanıcıdan oku.
+ADIM 4: Yas = ST - DY
+ADIM 5: EĞER Yas >= 18 İSE
+             "Ehliyet alabilirsiniz." yazdır.
+ADIM 6: DEĞİLSE
+             "Ehliyet almak için henüz küçüksünüz." yazdır.
+ADIM 7: DUR.</div>
+
+<h2>5. Değişken Takibi ve Elle Çalıştırma Tablosu (Trace Table)</h2>
+<p>
+    Bir algoritmanın çalışma doğruluğunu test etmek için adım adım değişkenlerin aldığı değerler bir tabloya yazılır. Buna <strong>Elle Çalıştırma Tablosu</strong> denir.
+</p>
+<p><strong>Örnek Problem:</strong> İki sayının toplamını bulan algoritma (Girdiler: S1 = 15, S2 = 25)</p>
+<table class="data-table">
+    <tr>
+        <th>Adım No</th>
+        <th>Çalışan Satır / İşlem</th>
+        <th>S1 Değeri</th>
+        <th>S2 Değeri</th>
+        <th>Toplam Değeri</th>
+        <th>Ekran Çıktısı</th>
+    </tr>
+    <tr>
+        <td>1</td>
+        <td>BAŞLA.</td>
+        <td>-</td>
+        <td>-</td>
+        <td>-</td>
+        <td>-</td>
+    </tr>
+    <tr>
+        <td>2</td>
+        <td>S1 değerini oku.</td>
+        <td>15</td>
+        <td>-</td>
+        <td>-</td>
+        <td>-</td>
+    </tr>
+    <tr>
+        <td>3</td>
+        <td>S2 değerini oku.</td>
+        <td>15</td>
+        <td>25</td>
+        <td>-</td>
+        <td>-</td>
+    </tr>
+    <tr>
+        <td>4</td>
+        <td>Toplam = S1 + S2</td>
+        <td>15</td>
+        <td>25</td>
+        <td>40</td>
+        <td>-</td>
+    </tr>
+    <tr>
+        <td>5</td>
+        <td>Toplam değerini yazdır.</td>
+        <td>15</td>
+        <td>25</td>
+        <td>40</td>
+        <td>40</td>
+    </tr>
+    <tr>
+        <td>6</td>
+        <td>DUR.</td>
+        <td>15</td>
+        <td>25</td>
+        <td>40</td>
+        <td>-</td>
+    </tr>
+</table>
+
+<h2>6. 4. Hafta İnteraktif Eğitim Oyunları</h2>
+<p>
+    Bu hafta öğrendiğiniz sözde kod, karar yapıları ve elle çalıştırma tablosu konularını pekiştirmeniz için 4 özel oyun hazırlanmıştır:
+</p>
+<ol>
+    <li><strong>Sözde Kodu Çöz! (5 Ana Görev):</strong> Sıralama, değişken takibi, operatörler, Eğer-Değilse ve dedektif bulmacaları.</li>
+    <li><strong>Karar ve Döngü Macerası:</strong> Yaş kontrolü, sıcaklık kontrolü ve hatalı giriş şifre döngüsü.</li>
+    <li><strong>Temel Sözde Kod ve Trace Tablosu:</strong> Satır satır ilerletme ve tablo tamamlama.</li>
+    <li><strong>Çeşitli Matematiksel Algoritmalar:</strong> Toplam, fark, çarpım, dikdörtgen alanı ve not ortalaması hesaplama.</li>
+</ol>
+
+<div class="note-box">
+    <strong>Öğretmen Tavsiyesi:</strong> Lütfen çalışma föyünü dikkatle inceledikten sonra portal üzerindeki 4 eğitici oyunu tamamlayarak puanınızı toplayınız ve atölye defterinize 5. bölümdeki trace tablosunu çiziniz.
+</div>
+
+</body>
+</html>

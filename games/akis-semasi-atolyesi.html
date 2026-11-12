@@ -1,0 +1,225 @@
+<!DOCTYPE html>
+<html lang="tr">
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width, initial-scale=1, viewport-fit=cover">
+<title>Akış Şeması Atölyesi</title>
+<link href="https://fonts.googleapis.com/css2?family=Lexend:wght@400;600;800&display=swap" rel="stylesheet">
+<style>
+:root{--bg:#E9EFF5;--card:#fff;--ink:#0F1E3A;--mut:#51607a;--line:#c5d0de;--grid:rgba(15,30,58,.07);--teal:#0E8F80;--vio:#6F52E8;--blue:#2A67E0;--yel:#FFC400;--ok:#0E8F80;--bad:#D6333B;
+box-sizing:border-box;padding-top:env(safe-area-inset-top,0px);padding-bottom:env(safe-area-inset-bottom,0px)}
+@media (prefers-color-scheme:dark){:root:not([data-theme="light"]){--bg:#0E1727;--card:#16233A;--ink:#EAF0FA;--mut:#9FB0CC;--line:#2B3C58;--grid:rgba(255,255,255,.05);--teal:#19B5A3;--vio:#8E77FF;--blue:#5B8DFF;--ok:#19B5A3;--bad:#FF6B73}}
+:root[data-theme="dark"]{--bg:#0E1727;--card:#16233A;--ink:#EAF0FA;--mut:#9FB0CC;--line:#2B3C58;--grid:rgba(255,255,255,.05);--teal:#19B5A3;--vio:#8E77FF;--blue:#5B8DFF;--ok:#19B5A3;--bad:#FF6B73}
+*{box-sizing:border-box}
+html,body{margin:0}
+body{background:var(--bg);color:var(--ink);font-family:"Lexend","Segoe UI",system-ui,sans-serif;line-height:1.5;min-height:100%;
+background-image:linear-gradient(var(--grid) 1px,transparent 1px),linear-gradient(90deg,var(--grid) 1px,transparent 1px);background-size:28px 28px}
+.wrap{max-width:760px;margin:0 auto;padding:16px}
+header{display:flex;justify-content:space-between;align-items:center;gap:12px;margin-bottom:14px}
+h1{font-size:1.15rem;font-weight:800;margin:0}
+.hud{display:flex;gap:10px;align-items:center;font-weight:600;font-size:.95rem}
+.pill{background:var(--card);border:2px solid var(--ink);border-radius:999px;padding:2px 12px}
+.card{background:var(--card);border:2px solid var(--ink);border-radius:14px;padding:20px;box-shadow:5px 5px 0 var(--ink)}
+h2{font-size:1.5rem;margin:0 0 6px;font-weight:800;line-height:1.25}
+p{margin:.4em 0}
+.mut{color:var(--mut);font-size:.95rem}
+.big{font-size:1.15rem;font-weight:600;margin:12px 0}
+.btn{font:inherit;font-weight:600;background:var(--yel);color:#0F1E3A;border:2px solid var(--ink);border-radius:10px;padding:10px 20px;cursor:pointer;box-shadow:3px 3px 0 var(--ink)}
+.btn:active{transform:translate(2px,2px);box-shadow:1px 1px 0 var(--ink)}
+:focus-visible{outline:3px solid var(--blue);outline-offset:2px}
+.legend{display:flex;flex-wrap:wrap;gap:14px 20px;margin:16px 0;align-items:center}
+.legend div{display:flex;flex-direction:column;align-items:center;font-size:.8rem;gap:2px}
+.stage{display:flex;justify-content:center;padding:10px 0}
+svg{max-width:100%;height:auto}
+.opts{display:grid;grid-template-columns:1fr 1fr;gap:10px;margin:12px 0}
+.opt{font:inherit;text-align:left;background:var(--card);color:var(--ink);border:2px solid var(--ink);border-radius:10px;padding:12px;cursor:pointer;display:flex;align-items:center;justify-content:center;min-height:64px}
+.opt:disabled{cursor:default}
+.opt.good{background:var(--ok);color:#fff;border-color:var(--ok)}
+.opt.bad{background:var(--bad);color:#fff;border-color:var(--bad)}
+.fb{min-height:3.2em;font-weight:600}
+.cols{display:grid;grid-template-columns:1fr 1fr;gap:16px}
+.chips{display:flex;flex-direction:column;gap:8px}
+.chip{font:inherit;text-align:left;background:var(--card);color:var(--ink);border:2px dashed var(--ink);border-radius:10px;padding:10px 12px;cursor:pointer}
+.chip.shake{animation:sh .35s;border-color:var(--bad)}
+@keyframes sh{25%{transform:translateX(-6px)}75%{transform:translateX(6px)}}
+.flow{display:flex;flex-direction:column;align-items:center;min-height:120px;border:2px dashed var(--line);border-radius:10px;padding:8px}
+.dn{color:var(--mut);line-height:1.1;font-size:.8rem}
+.hint{color:var(--mut);font-size:.85rem}
+.prog{height:8px;background:var(--line);border-radius:4px;margin-bottom:14px;overflow:hidden}
+.prog i{display:block;height:100%;background:var(--teal);transition:width .3s}
+path.hl{stroke:var(--ok);stroke-width:5}
+.dim{opacity:.25}
+.rank{font-size:2.4rem;font-weight:800;margin:6px 0}
+@media (max-width:620px){.opts,.cols{grid-template-columns:1fr}}
+@media (prefers-reduced-motion:reduce){*{animation:none!important;transition:none!important}}
+</style>
+</head>
+<body>
+<div class="wrap">
+<header><h1>Akış Şeması Atölyesi</h1><div class="hud"><span class="pill" id="lv">Giriş</span><span class="pill">Puan: <b id="score">0</b></span></div></header>
+<main id="app"></main>
+</div>
+<script>
+const $=s=>document.querySelector(s),app=$("#app");
+const rand=n=>Math.floor(Math.random()*n);
+const shuf=a=>a.map(x=>[Math.random(),x]).sort((a,b)=>a[0]-b[0]).map(x=>x[1]);
+let score=0,poss=0;
+function add(g,m){score+=g;poss+=m;$("#score").textContent=score}
+function lvl(t){$("#lv").textContent=t}
+
+const T={
+ t:{n:"Başla / Bitir",d:"Akışın başlangıcını ve bitişini gösterir",c:"var(--teal)"},
+ io:{n:"Giriş / Çıkış",d:"Veri alınır ya da sonuç ekrana yazılır",c:"var(--vio)"},
+ p:{n:"İşlem",d:"Hesaplama yapılır ya da değer atanır",c:"var(--blue)"},
+ d:{n:"Karar",d:"Evet/Hayır sorusu sorulur, yol ikiye ayrılır",c:"var(--yel)"},
+ a:{n:"Akış oku",d:"Adımların sırasını ve yönünü gösterir",c:"var(--mut)"}
+};
+function sh(k,label,w,h,fs=14){
+ const c=T[k].c,tc=k==="d"?"#0F1E3A":"#fff";let s;
+ if(k==="t")s=`<rect width="${w}" height="${h}" rx="${h/2}" fill="${c}"/>`;
+ else if(k==="io")s=`<polygon points="14,0 ${w},0 ${w-14},${h} 0,${h}" fill="${c}"/>`;
+ else if(k==="p")s=`<rect width="${w}" height="${h}" rx="5" fill="${c}"/>`;
+ else if(k==="d")s=`<polygon points="${w/2},0 ${w},${h/2} ${w/2},${h} 0,${h/2}" fill="${c}"/>`;
+ else s=`<line x1="${w/2}" y1="4" x2="${w/2}" y2="${h-10}" stroke="${c}" stroke-width="4"/><polygon points="${w/2-9},${h-18} ${w/2+9},${h-18} ${w/2},${h-2}" fill="${c}"/>`;
+ const tx=label?`<text x="${w/2}" y="${h/2}" text-anchor="middle" dominant-baseline="central" fill="${tc}" font-size="${fs}" font-weight="600">${label}</text>`:"";
+ return s+tx;
+}
+function shape(k,label="",w,h){
+ w=w||(k==="a"?60:150);h=h||(k==="a"?64:56);
+ return `<svg viewBox="0 0 ${w} ${h}" width="${w}" height="${h}" role="img" aria-label="${T[k].n}">${sh(k,label,w,h)}</svg>`;
+}
+function prog(a,b){return `<div class="prog"><i style="width:${a/b*100}%"></i></div>`}
+
+/* ---------- Ana ekran ---------- */
+function home(){
+ lvl("Giriş");
+ app.innerHTML=`<section class="card">
+ <h2>Çırak mı, usta mı?</h2>
+ <p>Üç seviyeyi geç, akış şeması ustası ol. Doğru cevaplar puan kazandırır.</p>
+ <div class="legend">${Object.keys(T).map(k=>`<div>${shape(k,"",k==="a"?40:90,k==="a"?44:34)}<span>${T[k].n}</span></div>`).join("")}</div>
+ <p class="mut"><b>1. Seviye:</b> Sembolleri tanı &nbsp; <b>2. Seviye:</b> Adımları sıraya diz &nbsp; <b>3. Seviye:</b> Doğru yolu bul</p>
+ <p><button class="btn" id="go">Oyuna başla</button></p></section>`;
+ $("#go").onclick=()=>{score=0;poss=0;add(0,0);L1()};
+}
+
+function bridge(title,text,next,label){
+ app.innerHTML=`<section class="card"><h2>${title}</h2><p>${text}</p><p>Şu anki puanın: <b>${score}</b> / ${poss}</p><p><button class="btn" id="nx">${label}</button></p></section>`;
+ $("#nx").onclick=next;
+}
+
+/* ---------- Seviye 1: Sembolü tanı ---------- */
+function L1(){
+ lvl("Seviye 1/3");
+ const qs=shuf(Object.keys(T).flatMap(k=>[[k,0],[k,1]]));let i=0;
+ (function q(){
+  if(i===qs.length)return bridge("1. seviye tamam","Sembolleri öğrendin. Şimdi bir akışı baştan kurma zamanı.",L2,"2. seviyeye geç");
+  const [k,m]=qs[i];
+  const o=shuf([k,...shuf(Object.keys(T).filter(x=>x!==k)).slice(0,3)]);
+  app.innerHTML=`<section class="card">${prog(i,qs.length)}
+  ${m?`<p class="big">“${T[k].d}.” Hangi sembol bu işi yapar?</p>`:`<div class="stage">${shape(k)}</div><p class="big">Bu sembol ne işe yarar?</p>`}
+  <div class="opts">${o.map(x=>`<button class="opt" data-k="${x}">${m?shape(x,"",x==="a"?40:110,x==="a"?44:42):T[x].d}</button>`).join("")}</div>
+  <p class="fb" id="fb" aria-live="polite"></p><p><button class="btn" id="nx" hidden>Sonraki soru</button></p></section>`;
+  document.querySelectorAll(".opt").forEach(b=>b.onclick=()=>{
+   const ok=b.dataset.k===k;
+   document.querySelectorAll(".opt").forEach(x=>{x.disabled=true;if(x.dataset.k===k)x.classList.add("good")});
+   if(!ok)b.classList.add("bad");
+   add(ok?10:0,10);
+   $("#fb").textContent=(ok?"Doğru! ":"Olmadı. ")+T[k].n+": "+T[k].d+".";
+   $("#nx").hidden=false;$("#nx").focus();
+  });
+  $("#nx").onclick=()=>{i++;q()};
+ })();
+}
+
+/* ---------- Seviye 2: Akışı sırala ---------- */
+const SC=[
+ {t:"Ekmek kızartma",s:[["t","Başla"],["p","Ekmeği makineye koy"],["io","Isı ayarını oku"],["p","Ekmeği kızart"],["io","Kızarmış ekmeği ver"],["t","Bitir"]]},
+ {t:"Dikdörtgenin alanı",s:[["t","Başla"],["io","a ve b kenarlarını oku"],["p","Alan = a × b"],["io","Alanı ekrana yaz"],["t","Bitir"]]},
+ {t:"Vize ortalaması",s:[["t","Başla"],["io","Vize 1’i oku"],["io","Vize 2’yi oku"],["p","Ort = (Vize1 + Vize2) / 2"],["io","Ort’u ekrana yaz"],["t","Bitir"]]}
+];
+function L2(){
+ lvl("Seviye 2/3");let n=0;
+ (function run(){
+  if(n===SC.length)return bridge("2. seviye tamam","Adımları doğru sıraya dizdin. Son seviyede akışın hangi yoldan gittiğini bulacaksın.",L3,"3. seviyeye geç");
+  const S=SC[n],len=S.s.length;let pos=0,err=0;
+  add(0,5*len+10);
+  app.innerHTML=`<section class="card">${prog(n,SC.length)}
+  <h2>${S.t}</h2><p class="mut">Adımlara sırayla tıkla. Doğru sıradaysa akış şemasına eklenir.</p>
+  <div class="cols"><div class="chips">${shuf(S.s.map((x,j)=>j)).map(j=>`<button class="chip" data-j="${j}">${S.s[j][1]}</button>`).join("")}</div>
+  <div class="flow" id="flow"><span class="hint" id="h">Şema burada oluşacak</span></div></div>
+  <p class="fb" id="fb" aria-live="polite"></p><p><button class="btn" id="nx" hidden>Sonraki akış</button></p></section>`;
+  document.querySelectorAll(".chip").forEach(b=>b.onclick=()=>{
+   const j=+b.dataset.j;
+   if(j!==pos){err++;b.classList.remove("shake");void b.offsetWidth;b.classList.add("shake");$("#fb").textContent="Bu adım şimdi değil. Önce ne olmalı?";return}
+   const [k,l]=S.s[j];
+   if($("#h"))$("#h").remove();
+   $("#flow").insertAdjacentHTML("beforeend",(pos?`<div class="dn">▼</div>`:"")+shape(k,l,270,48));
+   b.hidden=true;pos++;add(5,0);$("#fb").textContent="";
+   if(pos===len){add(err?0:10,0);$("#fb").textContent=err?`Tamamlandı. ${err} yanlış deneme yaptın.`:"Hatasız! +10 bonus puan.";$("#nx").hidden=false;$("#nx").focus()}
+  });
+  $("#nx").onclick=()=>{n++;run()};
+ })();
+}
+
+/* ---------- Seviye 3: Doğru yolu bul ---------- */
+const PR=[
+ {t:"Çift mi, tek mi?",r:"Sayıyı oku",q:"Sayı çift mi?",yes:"“ÇİFT” yaz",no:"“TEK” yaz",lab:"Sayı",val:t=>{let n=1+rand(40);if((n%2===0)!==t)n++;return n}},
+ {t:"Not kontrolü",r:"Notu oku",q:"Not ≥ 50 mi?",yes:"“Geçti” yaz",no:"“Kaldı” yaz",lab:"Not",val:t=>t?50+rand(51):rand(50)},
+ {t:"Akıllı klima",r:"Sıcaklığı oku",q:"Sıcaklık > 30 mu?",yes:"Klimayı aç",no:"Klimayı kapat",lab:"Sıcaklık",val:t=>t?31+rand(10):10+rand(21)}
+];
+function flow(p){
+ return `<svg viewBox="0 0 320 384" width="320" role="img" aria-label="${p.t} akış şeması">
+ <defs><marker id="ah" viewBox="0 0 10 10" refX="8" refY="5" markerWidth="7" markerHeight="7" orient="auto"><path d="M0 0L10 5L0 10z" fill="var(--ink)"/></marker></defs>
+ <g fill="none" stroke="var(--ink)" stroke-width="2" marker-end="url(#ah)">
+ <path d="M160 40V62"/><path d="M160 108V128"/>
+ <path class="y" d="M80 175H70V256"/><path class="n" d="M240 175H250V256"/>
+ <path class="y" d="M70 304V322H160V338"/><path class="n" d="M250 304V322H160V338"/></g>
+ <g transform="translate(85,0)">${sh("t","Başla",150,40)}</g>
+ <g transform="translate(70,64)">${sh("io",p.r,180,44)}</g>
+ <g transform="translate(80,128)">${sh("d",p.q,160,94,12.5)}</g>
+ <g class="y" transform="translate(0,258)">${sh("p",p.yes,140,46,13)}</g>
+ <g class="n" transform="translate(180,258)">${sh("p",p.no,140,46,13)}</g>
+ <g transform="translate(85,340)">${sh("t","Bitir",150,40)}</g>
+ <text x="40" y="166" text-anchor="middle" font-size="13" font-weight="600" fill="var(--ink)">Evet</text>
+ <text x="282" y="166" text-anchor="middle" font-size="13" font-weight="600" fill="var(--ink)">Hayır</text></svg>`;
+}
+function L3(){
+ lvl("Seviye 3/3");
+ const rounds=shuf(PR.flatMap(p=>[[p,true],[p,false]]));let i=0;
+ (function q(){
+  if(i===rounds.length)return end();
+  const [p,t]=rounds[i],v=p.val(t);
+  app.innerHTML=`<section class="card">${prog(i,rounds.length)}
+  <h2>${p.t}</h2>
+  <p class="big">Girilen değer: <b>${p.lab} = ${v}</b><br>Akış hangi yoldan gider?</p>
+  <div class="stage" id="st">${flow(p)}</div>
+  <div class="opts"><button class="opt" data-a="1">Evet yolu</button><button class="opt" data-a="0">Hayır yolu</button></div>
+  <p class="fb" id="fb" aria-live="polite"></p><p><button class="btn" id="nx" hidden>Sonraki tur</button></p></section>`;
+  document.querySelectorAll(".opt").forEach(b=>b.onclick=()=>{
+   const ok=(b.dataset.a==="1")===t;
+   document.querySelectorAll(".opt").forEach(x=>{x.disabled=true;if((x.dataset.a==="1")===t)x.classList.add("good")});
+   if(!ok)b.classList.add("bad");
+   document.querySelectorAll(t?".n":".y").forEach(e=>e.classList.add("dim"));
+   document.querySelectorAll(t?"path.y":"path.n").forEach(e=>e.classList.add("hl"));
+   add(ok?10:0,10);
+   $("#fb").textContent=(ok?"Doğru! ":"Olmadı. ")+`${p.lab} = ${v} için “${p.q}” sorusunun cevabı ${t?"Evet":"Hayır"}. Çalışan adım: ${t?p.yes:p.no}.`;
+   $("#nx").hidden=false;$("#nx").focus();
+  });
+  $("#nx").onclick=()=>{i++;q()};
+ })();
+}
+
+/* ---------- Bitiş ---------- */
+function end(){
+ lvl("Bitti");
+ const r=score/poss,rk=r>=.85?"Usta":r>=.6?"Kalfa":"Çırak";
+ const msg=rk==="Usta"?"Akış şemalarını rahatça okuyup kuruyorsun.":rk==="Kalfa"?"İyi gidiyorsun. Karıştırdığın sembolleri bir kez daha dene.":"İyi bir başlangıç. Bir tur daha oynarsan semboller oturacak.";
+ app.innerHTML=`<section class="card"><p class="mut">Atölye sonucu</p><div class="rank">${rk}</div>
+ <p class="big">${score} / ${poss} puan (%${Math.round(r*100)})</p><p>${msg}</p>
+ <p><button class="btn" id="again">Tekrar oyna</button></p></section>`;
+ $("#again").onclick=home;
+}
+home();
+</script>
+</body>
+</html>

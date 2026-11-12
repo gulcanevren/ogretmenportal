@@ -1,0 +1,681 @@
+<!DOCTYPE html>
+<html lang="tr">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>🧩 SÖZDE KODU ÇÖZ! | İTO Vakfı Süleyman Taştekin MTAL</title>
+    <!-- Tailwind CSS CDN -->
+    <script src="https://cdn.tailwindcss.com"></script>
+    <style>
+        @import url('https://fonts.googleapis.com/css2?family=Inter:wght@400;600;700;800&display=swap');
+        body {
+            font-family: 'Inter', sans-serif;
+            user-select: none;
+        }
+        @keyframes pulseGlow {
+            0%, 100% { box-shadow: 0 0 15px rgba(59, 130, 246, 0.5); }
+            50% { box-shadow: 0 0 25px rgba(59, 130, 246, 0.8); }
+        }
+        .pulse-card {
+            animation: pulseGlow 3s infinite;
+        }
+        .code-line {
+            transition: all 0.3s ease;
+        }
+        .code-active {
+            background-color: #fef08a !important;
+            border-left: 4px solid #eab308;
+            transform: translateX(4px);
+        }
+    </style>
+</head>
+<body class="bg-gradient-to-br from-slate-900 via-indigo-950 to-blue-950 text-slate-100 min-h-screen flex flex-col justify-between">
+
+    <header class="w-full bg-slate-900/80 backdrop-blur border-b border-slate-800 p-4 sticky top-0 z-50 shadow-lg">
+        <div class="max-w-6xl mx-auto flex flex-col sm:flex-row justify-between items-center gap-4">
+            <div class="flex items-center gap-3">
+                <div class="bg-gradient-to-tr from-blue-600 to-indigo-500 p-3 rounded-2xl shadow-md text-2xl font-black">🧩</div>
+                <div>
+                    <h1 class="text-xl sm:text-2xl font-black tracking-tight text-white">SÖZDE KODU ÇÖZ!</h1>
+                    <p class="text-xs text-blue-400 font-semibold">İTO Vakfı Süleyman Taştekin MTAL • Programlama Temelleri</p>
+                </div>
+            </div>
+            <div class="flex items-center gap-4 bg-slate-800/90 px-5 py-2.5 rounded-2xl border border-slate-700 shadow-inner">
+                <span class="text-2xl">🏆</span>
+                <div>
+                    <div class="text-xs text-slate-400 font-bold uppercase tracking-wider">TOPLAM PUAN</div>
+                    <div id="scoreDisplay" class="text-2xl font-black text-amber-400">0</div>
+                </div>
+            </div>
+        </div>
+    </header>
+
+    <main class="max-w-5xl w-full mx-auto p-4 sm:p-6 my-auto flex-grow flex flex-col justify-center">
+        
+        <!-- MAIN MENU VIEW -->
+        <div id="mainMenu" class="space-y-6">
+            <div class="text-center space-y-2 mb-8">
+                <span class="bg-blue-500/20 text-blue-300 px-4 py-1.5 rounded-full text-xs font-bold uppercase tracking-widest border border-blue-500/30">Başlangıç Seviyesi Eğitim Oyunu</span>
+                <h2 class="text-3xl sm:text-4xl font-extrabold text-white tracking-tight">Algoritmanın hangi adımı izleyeceğini bul!</h2>
+                <p class="text-slate-400 max-w-2xl mx-auto text-sm sm:text-base">Sevgili 9. Sınıf Bilişim öğrencisi! Aşağıdaki 5 ana görevi sırasıyla tamamlayarak sözde kod (pseudocode) mantığını öğren.</p>
+            </div>
+
+            <div class="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-5">
+                <!-- GÖREV 1 -->
+                <div onclick="openTask(1)" class="bg-slate-800/80 hover:bg-slate-800 border-2 border-emerald-500/40 hover:border-emerald-500 rounded-3xl p-6 cursor-pointer transition-all duration-300 hover:scale-[1.02] shadow-xl flex flex-col justify-between group">
+                    <div>
+                        <div class="flex justify-between items-start mb-4">
+                            <span class="bg-emerald-500/20 text-emerald-400 text-xs font-black px-3 py-1 rounded-full border border-emerald-500/30">GÖREV 1</span>
+                            <span id="badge1" class="text-xs font-bold text-slate-400 bg-slate-900 px-2.5 py-1 rounded-lg">🔒 Kilitli</span>
+                        </div>
+                        <h3 class="text-xl font-bold text-white group-hover:text-emerald-400 transition-colors">Algoritmayı Sırala</h3>
+                        <p class="text-slate-400 text-sm mt-2">Günlük hayat problemi adımlarını mantıksal sıraya koy.</p>
+                    </div>
+                    <div class="mt-6 flex items-center justify-between text-xs font-bold text-emerald-400">
+                        <span>Adımları takip et</span>
+                        <span class="text-lg group-hover:translate-x-1 transition-transform">➡️</span>
+                    </div>
+                </div>
+
+                <!-- GÖREV 2 -->
+                <div onclick="openTask(2)" class="bg-slate-800/80 hover:bg-slate-800 border-2 border-blue-500/40 hover:border-blue-500 rounded-3xl p-6 cursor-pointer transition-all duration-300 hover:scale-[1.02] shadow-xl flex flex-col justify-between group">
+                    <div>
+                        <div class="flex justify-between items-start mb-4">
+                            <span class="bg-blue-500/20 text-blue-400 text-xs font-black px-3 py-1 rounded-full border border-blue-500/30">GÖREV 2</span>
+                            <span id="badge2" class="text-xs font-bold text-slate-400 bg-slate-900 px-2.5 py-1 rounded-lg">🔒 Kilitli</span>
+                        </div>
+                        <h3 class="text-xl font-bold text-white group-hover:text-blue-400 transition-colors">Değişkeni Takip Et</h3>
+                        <p class="text-slate-400 text-sm mt-2">Değişkenlerin matematiksel işlemlerle nasıl değiştiğini hesapla.</p>
+                    </div>
+                    <div class="mt-6 flex items-center justify-between text-xs font-bold text-blue-400">
+                        <span>Sonucu bul</span>
+                        <span class="text-lg group-hover:translate-x-1 transition-transform">➡️</span>
+                    </div>
+                </div>
+
+                <!-- GÖREV 3 -->
+                <div onclick="openTask(3)" class="bg-slate-800/80 hover:bg-slate-800 border-2 border-amber-500/40 hover:border-amber-500 rounded-3xl p-6 cursor-pointer transition-all duration-300 hover:scale-[1.02] shadow-xl flex flex-col justify-between group">
+                    <div>
+                        <div class="flex justify-between items-start mb-4">
+                            <span class="bg-amber-500/20 text-amber-400 text-xs font-black px-3 py-1 rounded-full border border-amber-500/30">GÖREV 3</span>
+                            <span id="badge3" class="text-xs font-bold text-slate-400 bg-slate-900 px-2.5 py-1 rounded-lg">🔒 Kilitli</span>
+                        </div>
+                        <h3 class="text-xl font-bold text-white group-hover:text-amber-400 transition-colors">Doğru mu Yanlış mı?</h3>
+                        <p class="text-slate-400 text-sm mt-2">Karşılaştırma operatörlerini (==, >, < vb.) test et.</p>
+                    </div>
+                    <div class="mt-6 flex items-center justify-between text-xs font-bold text-amber-400">
+                        <span>Karşılaştır</span>
+                        <span class="text-lg group-hover:translate-x-1 transition-transform">➡️</span>
+                    </div>
+                </div>
+
+                <!-- GÖREV 4 -->
+                <div onclick="openTask(4)" class="bg-slate-800/80 hover:bg-slate-800 border-2 border-orange-500/40 hover:border-orange-500 rounded-3xl p-6 cursor-pointer transition-all duration-300 hover:scale-[1.02] shadow-xl flex flex-col justify-between group">
+                    <div>
+                        <div class="flex justify-between items-start mb-4">
+                            <span class="bg-orange-500/20 text-orange-400 text-xs font-black px-3 py-1 rounded-full border border-orange-500/30">GÖREV 4</span>
+                            <span id="badge4" class="text-xs font-bold text-slate-400 bg-slate-900 px-2.5 py-1 rounded-lg">🔒 Kilitli</span>
+                        </div>
+                        <h3 class="text-xl font-bold text-white group-hover:text-orange-400 transition-colors">EĞER – DEĞİLSE</h3>
+                        <p class="text-slate-400 text-sm mt-2">Karar yapılarını ve adım adım şifre kontrolünü incele.</p>
+                    </div>
+                    <div class="mt-6 flex items-center justify-between text-xs font-bold text-orange-400">
+                        <span>Karar ver</span>
+                        <span class="text-lg group-hover:translate-x-1 transition-transform">➡️</span>
+                    </div>
+                </div>
+
+                <!-- GÖREV 5 -->
+                <div onclick="openTask(5)" class="bg-slate-800/80 hover:bg-slate-800 border-2 border-rose-500/40 hover:border-rose-500 rounded-3xl p-6 cursor-pointer transition-all duration-300 hover:scale-[1.02] shadow-xl flex flex-col justify-between group md:col-span-2 lg:col-span-1">
+                    <div>
+                        <div class="flex justify-between items-start mb-4">
+                            <span class="bg-rose-500/20 text-rose-400 text-xs font-black px-3 py-1 rounded-full border border-rose-500/30">GÖREV 5</span>
+                            <span id="badge5" class="text-xs font-bold text-slate-400 bg-slate-900 px-2.5 py-1 rounded-lg">🔒 Kilitli</span>
+                        </div>
+                        <h3 class="text-xl font-bold text-white group-hover:text-rose-400 transition-colors">Algoritma Dedektifi</h3>
+                        <p class="text-slate-400 text-sm mt-2">Elle çalıştırma tablosu, eksik satır ve yol seçimi bulmacaları.</p>
+                    </div>
+                    <div class="mt-6 flex items-center justify-between text-xs font-bold text-rose-400">
+                        <span>Dedektif ol</span>
+                        <span class="text-lg group-hover:translate-x-1 transition-transform">➡️</span>
+                    </div>
+                </div>
+            </div>
+        </div>
+
+        <!-- TASK CONTAINER (DYNAMICALLY LOADED) -->
+        <div id="taskContainer" class="hidden bg-slate-800/90 border border-slate-700 rounded-3xl p-6 sm:p-8 shadow-2xl relative">
+            <button onclick="returnToMenu()" class="absolute top-6 right-6 bg-slate-700 hover:bg-slate-600 text-slate-200 px-4 py-2 rounded-xl text-sm font-bold transition-all shadow-md flex items-center gap-2">
+                <span>⬅️</span> Ana Menü
+            </button>
+            <div id="taskContent">
+                <!-- İçerikler JS ile doldurulacak -->
+            </div>
+        </div>
+
+        <!-- FEEDBACK MODAL / BOX -->
+        <div id="feedbackBox" class="hidden mt-6 p-4 rounded-2xl text-center text-sm sm:text-base font-bold shadow-lg transition-all animate-bounce"></div>
+
+    </main>
+
+    <footer class="w-full text-center py-4 text-xs text-slate-500 border-t border-slate-800">
+        İTO Vakfı Süleyman Taştekin MTAL • Bilişim Teknolojileri Alanı © 2026
+    </footer>
+
+    <script>
+        let gameState = {
+            score: 0,
+            unlockedTask: 1,
+            currentTask: null,
+            subStep: 0,
+            firstAttempt: true
+        };
+
+        const taskDefinitions = {
+            1: { title: "GÖREV 1: Algoritmayı Sırala", type: "sort" },
+            2: { title: "GÖREV 2: Değişkeni Takip Et", type: "variable" },
+            3: { title: "GÖREV 3: Doğru mu Yanlış mı?", type: "comparison" },
+            4: { title: "GÖREV 4: EĞER – DEĞİLSE & Şifre Kontrolü", type: "ifelse" },
+            5: { title: "GÖREV 5: Algoritma Dedektifi", type: "detective" }
+        };
+
+        // Sayfa açıldığında kilitleri güncelle
+        function updateMenuBadges() {
+            for (let i = 1; i <= 5; i++) {
+                const badge = document.getElementById(`badge${i}`);
+                if (i < gameState.unlockedTask) {
+                    badge.innerHTML = "✅ Tamamlandı";
+                    badge.className = "text-xs font-bold text-emerald-400 bg-emerald-950/80 px-2.5 py-1 rounded-lg border border-emerald-500/30";
+                } else if (i === gameState.unlockedTask) {
+                    badge.innerHTML = "🟢 Açık / Oyna";
+                    badge.className = "text-xs font-bold text-blue-400 bg-blue-950/80 px-2.5 py-1 rounded-lg border border-blue-500/30 animate-pulse";
+                } else {
+                    badge.innerHTML = "🔒 Kilitli";
+                    badge.className = "text-xs font-bold text-slate-400 bg-slate-900 px-2.5 py-1 rounded-lg";
+                }
+            }
+            document.getElementById('scoreDisplay').innerText = gameState.score;
+        }
+
+        function openTask(taskId) {
+            if (taskId > gameState.unlockedTask) {
+                showFeedback("Önce önceki görevi tamamlamalısın!", false);
+                return;
+            }
+            gameState.currentTask = taskId;
+            gameState.firstAttempt = true;
+            document.getElementById('mainMenu').classList.add('hidden');
+            const container = document.getElementById('taskContainer');
+            container.classList.remove('hidden');
+            document.getElementById('feedbackBox').classList.add('hidden');
+            
+            renderTaskContent(taskId);
+        }
+
+        function returnToMenu() {
+            document.getElementById('taskContainer').classList.add('hidden');
+            document.getElementById('mainMenu').classList.remove('hidden');
+            document.getElementById('feedbackBox').classList.add('hidden');
+            updateMenuBadges();
+        }
+
+        function showFeedback(msg, isSuccess) {
+            const box = document.getElementById('feedbackBox');
+            box.classList.remove('hidden');
+            box.innerText = msg;
+            if (isSuccess) {
+                box.className = "mt-6 p-4 rounded-2xl text-center text-sm sm:text-base font-bold bg-emerald-900/80 text-emerald-200 border border-emerald-500 shadow-lg";
+            } else {
+                box.className = "mt-6 p-4 rounded-2xl text-center text-sm sm:text-base font-bold bg-rose-900/80 text-rose-200 border border-rose-500 shadow-lg";
+            }
+        }
+
+        function addScore(amount) {
+            let finalAmount = amount;
+            if (gameState.firstAttempt && amount > 0) {
+                finalAmount += 5; // İlk deneme bonusu (+5)
+            }
+            gameState.score += finalAmount;
+            document.getElementById('scoreDisplay').innerText = gameState.score;
+        }
+
+        function completeCurrentTask() {
+            addScore(10); // Görev tamamlama bonusu (+10)
+            if (gameState.unlockedTask === gameState.currentTask) {
+                gameState.unlockedTask++;
+            }
+            setTimeout(() => {
+                if (gameState.currentTask < 5) {
+                    showFeedback("🎉 Harika! Görev başarıyla tamamlandı. Sıradaki göreve geçebilirsin!", true);
+                    setTimeout(() => { openTask(gameState.currentTask + 1); }, 2000);
+                } else {
+                    showCongratsScreen();
+                }
+            }, 1000);
+        }
+
+        let task1Items = [
+            { id: 1, text: "BAŞLA." },
+            { id: 2, text: "Yaş değerini kullanıcıdan al." },
+            { id: 3, text: "Yaşı ekrana yazdır." },
+            { id: 4, text: "DUR." }
+        ];
+        let shuffledTask1 = [];
+
+        function renderTaskContent(taskId) {
+            const content = document.getElementById('taskContent');
+            
+            if (taskId === 1) {
+                // Karıştır
+                shuffledTask1 = [...task1Items].sort(() => Math.random() - 0.5);
+                content.innerHTML = `
+                    <div class="space-y-4">
+                        <span class="bg-emerald-500/20 text-emerald-300 px-3 py-1 rounded-full text-xs font-bold border border-emerald-500/30">GÖREV 1: ALGORİTMAYI SIRALA</span>
+                        <h3 class="text-2xl font-extrabold text-white">Problem: "Bir öğrencinin yaşını al ve ekrana yazdır."</h3>
+                        <p class="text-slate-300 text-sm">Aşağıdaki karışık sözde kod adımlarını doğru sıraya yerleştirmek için yukarı/aşağı taşıyabilir veya üzerine tıklayarak sırasını düzenleyebilirsin.</p>
+                        
+                        <div id="sortList" class="space-y-3 my-6">
+                            ${shuffledTask1.map((item, index) => `
+                                <div class="bg-slate-900 border border-slate-700 p-4 rounded-2xl flex justify-between items-center shadow-md">
+                                    <span class="font-bold text-white text-sm sm:text-base"><span class="text-emerald-400 mr-2">${index+1}. Adım:</span> ${item.text}</span>
+                                    <div class="flex gap-2">
+                                        <button onclick="moveTask1Item(${index}, -1)" class="bg-slate-800 hover:bg-slate-700 p-2 rounded-xl text-xs font-bold text-slate-300">⬆️ Yukarı</button>
+                                        <button onclick="moveTask1Item(${index}, 1)" class="bg-slate-800 hover:bg-slate-700 p-2 rounded-xl text-xs font-bold text-slate-300">⬇️ Aşağı</button>
+                                    </div>
+                                </div>
+                            `).join('')}
+                        </div>
+                        <button onclick="checkTask1()" class="w-full bg-emerald-600 hover:bg-emerald-500 text-white font-black py-4 rounded-2xl shadow-lg transition-all text-lg">Sıralamayı Kontrol Et 🚀</button>
+                    </div>
+                `;
+            } else if (taskId === 2) {
+                renderTask2(0);
+            } else if (taskId === 3) {
+                renderTask3(0);
+            } else if (taskId === 4) {
+                renderTask4Main();
+            } else if (taskId === 5) {
+                renderTask5Main();
+            }
+        }
+
+        function moveTask1Item(index, direction) {
+            const newIndex = index + direction;
+            if (newIndex >= 0 && newIndex < shuffledTask1.length) {
+                const temp = shuffledTask1[index];
+                shuffledTask1[index] = shuffledTask1[newIndex];
+                shuffledTask1[newIndex] = temp;
+                
+                // Yeniden çiz
+                const listDiv = document.getElementById('sortList');
+                listDiv.innerHTML = shuffledTask1.map((item, idx) => `
+                    <div class="bg-slate-900 border border-slate-700 p-4 rounded-2xl flex justify-between items-center shadow-md">
+                        <span class="font-bold text-white text-sm sm:text-base"><span class="text-emerald-400 mr-2">${idx+1}. Adım:</span> ${item.text}</span>
+                        <div class="flex gap-2">
+                            <button onclick="moveTask1Item(${idx}, -1)" class="bg-slate-800 hover:bg-slate-700 p-2 rounded-xl text-xs font-bold text-slate-300">⬆️ Yukarı</button>
+                            <button onclick="moveTask1Item(${idx}, 1)" class="bg-slate-800 hover:bg-slate-700 p-2 rounded-xl text-xs font-bold text-slate-300">⬇️ Aşağı</button>
+                        </div>
+                    </div>
+                `).join('');
+            }
+        }
+
+        function checkTask1() {
+            // Doğru sıra: BAŞLA., Yaş değerini kullanıcıdan al., Yaşı ekrana yazdır., DUR.
+            if (shuffledTask1[0].id === 1 && shuffledTask1[1].id === 2 && shuffledTask1[2].id === 3 && shuffledTask1[3].id === 4) {
+                showFeedback("🎉 Harika! Algoritma adım sırasını mükemmel oluşturdun.", true);
+                addScore(10);
+                completeCurrentTask();
+            } else {
+                gameState.firstAttempt = false;
+                showFeedback("💡 Tekrar düşün. Algoritma her zaman BAŞLA ile başlar ve DUR ile biter.", false);
+            }
+        }
+
+        const task2Questions = [
+            {
+                code: "BAŞLA\nSayi = 20\nSonuc = Sayi + 10\nSonuc değerini yazdır.\nDUR.",
+                question: "Sonuc değişkeninin değeri kaçtır?",
+                options: ["10", "20", "30", "40"],
+                correct: 2
+            },
+            {
+                code: "BAŞLA\nSayi = 15\nSonuc = Sayi + 5\nSonuc değerini yazdır.\nDUR.",
+                question: "Sonuc değişkeninin değeri kaçtır?",
+                options: ["10", "15", "20", "25"],
+                correct: 2
+            },
+            {
+                code: "BAŞLA\nSayi = 30\nSonuc = Sayi - 10\nSonuc değerini yazdır.\nDUR.",
+                question: "Sonuc değişkeninin değeri kaçtır?",
+                options: ["10", "20", "30", "40"],
+                correct: 1
+            },
+            {
+                code: "BAŞLA\nSayi = 6\nSonuc = Sayi * 2\nSonuc değerini yazdır.\nDUR.",
+                question: "Sonuc değişkeninin değeri kaçtır?",
+                options: ["8", "12", "16", "24"],
+                correct: 1
+            }
+        ];
+        let currentTask2Index = 0;
+
+        function renderTask2(index) {
+            currentTask2Index = index;
+            const q = task2Questions[index];
+            const content = document.getElementById('taskContent');
+            content.innerHTML = `
+                <div class="space-y-4">
+                    <span class="bg-blue-500/20 text-blue-300 px-3 py-1 rounded-full text-xs font-bold border border-blue-500/30">GÖREV 2: DEĞİŞKENİ TAKIP ET (${index+1}/4)</span>
+                    <h3 class="text-xl font-extrabold text-white">Sözde Kodu İncele ve Değeri Bul</h3>
+                    
+                    <div class="bg-slate-900 border border-slate-700 p-5 rounded-2xl font-mono text-sm sm:text-base text-blue-300 whitespace-pre-line shadow-inner">
+                        ${q.code}
+                    </div>
+                    
+                    <p class="font-bold text-white text-lg">${q.question}</p>
+                    
+                    <div class="grid grid-cols-1 sm:grid-cols-2 gap-3">
+                        ${q.options.map((opt, optIdx) => `
+                            <button onclick="checkTask2(${optIdx})" class="bg-slate-900 hover:bg-slate-700 border border-slate-700 hover:border-blue-500 p-4 rounded-2xl font-bold text-white text-left transition-all flex items-center justify-between">
+                                <span>${String.fromCharCode(65+optIdx)}) ${opt}</span>
+                                <span class="text-blue-400">Seç ➡️</span>
+                            </button>
+                        `).join('')}
+                    </div>
+                </div>
+            `;
+        }
+
+        function checkTask2(selectedOpt) {
+            const q = task2Questions[currentTask2Index];
+            if (selectedOpt === q.correct) {
+                showFeedback("🎉 Doğru! Değişkenin değerini doğru takip ettin.", true);
+                addScore(10);
+                setTimeout(() => {
+                    document.getElementById('feedbackBox').classList.add('hidden');
+                    if (currentTask2Index + 1 < task2Questions.length) {
+                        renderTask2(currentTask2Index + 1);
+                    } else {
+                        completeCurrentTask();
+                    }
+                }, 1500);
+            } else {
+                gameState.firstAttempt = false;
+                showFeedback("💡 Tekrar düşün. Matematiksel işlemi ve değişkenin değerini adım adım tekrar hesapla.", false);
+            }
+        }
+
+        const task3Questions = [
+            { sayi: 20, cond: "20 > 10", answer: true, text: "Sayi = 20\nEĞER Sayi > 10 İSE\n  \"Büyük\" yazdır.\nDEĞİLSE\n  \"Küçük veya eşit\" yazdır." },
+            { sayi: 5, cond: "5 > 10", answer: false, text: "Sayi = 5\nEĞER Sayi > 10 İSE\n  \"Büyük\" yazdır.\nDEĞİLSE\n  \"Küçük veya eşit\" yazdır." },
+            { sayi: 10, cond: "10 == 10", answer: true, text: "Sayi = 10\nEĞER Sayi == 10 İSE\n  \"Eşit\" yazdır.\nDEĞİLSE\n  \"Eşit değil\" yazdır." },
+            { sayi: 15, cond: "15 <= 10", answer: false, text: "Sayi = 15\nEĞER Sayi <= 10 İSE\n  \"Küçük veya eşit\" yazdır.\nDEĞİLSE\n  \"Büyük\" yazdır." }
+        ];
+        let currentTask3Index = 0;
+
+        function renderTask3(index) {
+            currentTask3Index = index;
+            const q = task3Questions[index];
+            const content = document.getElementById('taskContent');
+            content.innerHTML = `
+                <div class="space-y-4">
+                    <span class="bg-amber-500/20 text-amber-300 px-3 py-1 rounded-full text-xs font-bold border border-amber-500/30">GÖREV 3: DOĞRU MU YANLIŞ MI? (${index+1}/4)</span>
+                    <h3 class="text-xl font-extrabold text-white">Karşılaştırma Sonucunu Bul</h3>
+                    
+                    <div class="bg-slate-900 border border-slate-700 p-5 rounded-2xl font-mono text-sm sm:text-base text-amber-300 whitespace-pre-line shadow-inner">
+                        ${q.text}
+                    </div>
+                    
+                    <div class="bg-slate-950 p-4 rounded-2xl text-center border border-slate-800">
+                        <span class="text-xs text-slate-400 block mb-1">SORULAN KARŞILAŞTIRMA:</span>
+                        <span class="text-2xl font-black text-white">${q.cond}</span>
+                    </div>
+                    
+                    <div class="grid grid-cols-2 gap-4">
+                        <button onclick="checkTask3(true)" class="bg-emerald-600 hover:bg-emerald-500 p-4 rounded-2xl font-black text-white text-lg shadow-lg transition-all flex items-center justify-center gap-2">
+                            <span>🟢</span> DOĞRU
+                        </button>
+                        <button onclick="checkTask3(false)" class="bg-rose-600 hover:bg-rose-500 p-4 rounded-2xl font-black text-white text-lg shadow-lg transition-all flex items-center justify-center gap-2">
+                            <span>🔴</span> YANLIŞ
+                        </button>
+                    </div>
+                </div>
+            `;
+        }
+
+        function checkTask3(userAns) {
+            const q = task3Questions[currentTask3Index];
+            if (userAns === q.answer) {
+                showFeedback("🎉 Harika! Karşılaştırma sonucunu doğru bildin.", true);
+                addScore(10);
+                setTimeout(() => {
+                    document.getElementById('feedbackBox').classList.add('hidden');
+                    if (currentTask3Index + 1 < task3Questions.length) {
+                        renderTask3(currentTask3Index + 1);
+                    } else {
+                        completeCurrentTask();
+                    }
+                }, 1500);
+            } else {
+                gameState.firstAttempt = false;
+                showFeedback("💡 Tekrar düşün. Verilen değeri karşılaştırma operatöründe yerine koy ve sonucu kontrol et.", false);
+            }
+        }
+
+        function renderTask4Main() {
+            const content = document.getElementById('taskContent');
+            content.innerHTML = `
+                <div class="space-y-6">
+                    <span class="bg-orange-500/20 text-orange-300 px-3 py-1 rounded-full text-xs font-bold border border-orange-500/30">GÖREV 4: EĞER – DEĞİLSE</span>
+                    <h3 class="text-2xl font-extrabold text-white">Karar Yapıları ve Şifre Kontrolü</h3>
+                    <p class="text-slate-300 text-sm">Bu bölümde adım adım şifre kontrolü simülasyonunu inceleyebilir ve karar mekanizmasını öğrenebilirsin.</p>
+                    
+                    <div class="grid grid-cols-1 sm:grid-cols-2 gap-4">
+                        <button onclick="renderTask4PasswordSim()" class="bg-slate-900 hover:bg-slate-700 border border-slate-700 hover:border-orange-500 p-6 rounded-2xl text-left transition-all space-y-2 shadow-lg">
+                            <span class="text-2xl">🔐</span>
+                            <h4 class="text-lg font-bold text-white">Şifre Kontrolü Simülasyonu</h4>
+                            <p class="text-xs text-slate-400">Adım adım satır ilerletme ve karar ağacı analizi.</p>
+                        </button>
+                        
+                        <button onclick="renderTask4DailyExamples()" class="bg-slate-900 hover:bg-slate-700 border border-slate-700 hover:border-orange-500 p-6 rounded-2xl text-left transition-all space-y-2 shadow-lg">
+                            <span class="text-2xl">🌍</span>
+                            <h4 class="text-lg font-bold text-white">Günlük Hayat Örnekleri</h4>
+                            <p class="text-xs text-slate-400">Yaş, sıcaklık, bakiye ve sınav notu koşul örnekleri.</p>
+                        </button>
+                    </div>
+                </div>
+            `;
+        }
+
+        // Şifre Simülasyonu Adımları
+        let passStep = 0;
+        const passwordSteps = [
+            { line: 0, text: "BAŞLA" },
+            { line: 1, text: 'sifre = "1234"' },
+            { line: 2, text: 'tahmin = "2580"' },
+            { line: 3, text: "tahmin == sifre?" },
+            { line: 4, text: "FALSE / YANLIŞ (Şifreler eşleşmedi)" },
+            { line: 5, text: "DEĞİLSE bloğuna girildi" },
+            { line: 6, text: '"Hatalı Şifre" çıktısı gösterildi' },
+            { line: 7, text: "DUR." }
+        ];
+
+        function renderTask4PasswordSim() {
+            passStep = 0;
+            const content = document.getElementById('taskContent');
+            content.innerHTML = `
+                <div class="space-y-4">
+                    <div class="flex items-center justify-between">
+                        <span class="bg-orange-500/20 text-orange-300 px-3 py-1 rounded-full text-xs font-bold border border-orange-500/30">ADIM ADIM ŞİFRE KONTROLÜ</span>
+                        <button onclick="renderTask4Main()" class="text-xs text-slate-400 hover:text-white">⬅️ Geri Dön</button>
+                    </div>
+                    
+                    <p class="text-slate-300 text-sm">"SONRAKİ ADIM" butonuna basarak algoritmanın satır satır nasıl çalıştığını ve karar anını gözlemle.</p>
+                    
+                    <div id="codeBlockSim" class="bg-slate-900 border border-slate-700 p-5 rounded-2xl font-mono text-sm space-y-2 shadow-inner">
+                        <div id="cline-0" class="p-2 rounded-xl text-slate-300">BAŞLA</div>
+                        <div id="cline-1" class="p-2 rounded-xl text-slate-300">sifre = "1234"</div>
+                        <div id="cline-2" class="p-2 rounded-xl text-slate-300">tahmin = "2580"</div>
+                        <div id="cline-3" class="p-2 rounded-xl text-slate-300">EĞER tahmin == sifre İSE</div>
+                        <div id="cline-4" class="p-2 rounded-xl text-slate-300 pl-6">"Giriş Başarılı" yazdır.</div>
+                        <div id="cline-5" class="p-2 rounded-xl text-slate-300">DEĞİLSE</div>
+                        <div id="cline-6" class="p-2 rounded-xl text-slate-300 pl-6">"Hatalı Şifre" yazdır.</div>
+                        <div id="cline-7" class="p-2 rounded-xl text-slate-300">DUR.</div>
+                    </div>
+                    
+                    <div id="simStatusMsg" class="bg-slate-950 p-4 rounded-xl border border-slate-800 text-sm text-orange-300 font-semibold text-center">
+                        Simülasyona başlamak için aşağıdaki butona tıkla.
+                    </div>
+                    
+                    <button onclick="nextPassStep()" class="w-full bg-orange-600 hover:bg-orange-500 text-white font-black py-4 rounded-2xl shadow-lg transition-all text-lg">SONRAKİ ADIM ➡️</button>
+                </div>
+            `;
+        }
+
+        function nextPassStep() {
+            // Önceki vurguyu kaldır
+            for (let i = 0; i <= 7; i++) {
+                const el = document.getElementById(`cline-${i}`);
+                if (el) el.className = "p-2 rounded-xl text-slate-300";
+            }
+
+            if (passStep < passwordSteps.length) {
+                // Aktif satırı bul ve vurgula
+                let activeLineIndex = passStep;
+                if (passStep === 3) activeLineIndex = 3;
+                if (passStep === 4) activeLineIndex = 3;
+                if (passStep === 5) activeLineIndex = 5;
+                if (passStep === 6) activeLineIndex = 6;
+                if (passStep === 7) activeLineIndex = 7;
+
+                const activeEl = document.getElementById(`cline-${activeLineIndex}`);
+                if (activeEl) activeEl.className = "p-2 rounded-xl code-active font-bold text-slate-900";
+
+                document.getElementById('simStatusMsg').innerText = `Adım ${passStep+1}: ${passwordSteps[passStep].text}`;
+                passStep++;
+            } else {
+                showFeedback("🎉 Harika! Şifre kontrolü algoritmasını ve DEĞİLSE dalını tamamladın.", true);
+                addScore(10);
+                completeCurrentTask();
+            }
+        }
+
+        function renderTask4DailyExamples() {
+            const content = document.getElementById('taskContent');
+            content.innerHTML = `
+                <div class="space-y-4">
+                    <div class="flex items-center justify-between">
+                        <span class="bg-orange-500/20 text-orange-300 px-3 py-1 rounded-full text-xs font-bold border border-orange-500/30">GÜNLÜK HAYATTAN ÖRNEKLER</span>
+                        <button onclick="renderTask4Main()" class="text-xs text-slate-400 hover:text-white">⬅️ Geri Dön</button>
+                    </div>
+                    
+                    <div class="grid grid-cols-1 sm:grid-cols-2 gap-4">
+                        <div class="bg-slate-900 border border-slate-700 p-4 rounded-2xl space-y-2">
+                            <h4 class="font-bold text-orange-400 text-sm">🎓 Sınav Notu</h4>
+                            <p class="font-mono text-xs text-slate-300">Not = 70<br>EĞER Not >= 50 İSE<br>&nbsp;&nbsp;"Başarılı"<br>DEĞİLSE<br>&nbsp;&nbsp;"Başarısız"</p>
+                            <span class="text-xs bg-emerald-950 text-emerald-300 px-2 py-1 rounded border border-emerald-500/30 inline-block font-semibold">Sonuç: Başarılı</span>
+                        </div>
+                        
+                        <div class="bg-slate-900 border border-slate-700 p-4 rounded-2xl space-y-2">
+                            <h4 class="font-bold text-orange-400 text-sm">🌡️ Hava Sıcaklığı</h4>
+                            <p class="font-mono text-xs text-slate-300">Sıcaklık = 30<br>EĞER Sıcaklık > 25 İSE<br>&nbsp;&nbsp;"Hava sıcak"<br>DEĞİLSE<br>&nbsp;&nbsp;"Hava serin"</p>
+                            <span class="text-xs bg-emerald-950 text-emerald-300 px-2 py-1 rounded border border-emerald-500/30 inline-block font-semibold">Sonuç: Hava sıcak</span>
+                        </div>
+
+                        <div class="bg-slate-900 border border-slate-700 p-4 rounded-2xl space-y-2">
+                            <h4 class="font-bold text-orange-400 text-sm">💳 Banka Bakiyesi</h4>
+                            <p class="font-mono text-xs text-slate-300">Bakiye = 800<br>EĞER Bakiye >= 500 İSE<br>&nbsp;&nbsp;"Yeterli bakiye"<br>DEĞİLSE<br>&nbsp;&nbsp;"Yetersiz bakiye"</p>
+                            <span class="text-xs bg-emerald-950 text-emerald-300 px-2 py-1 rounded border border-emerald-500/30 inline-block font-semibold">Sonuç: Yeterli bakiye</span>
+                        </div>
+
+                        <div class="bg-slate-900 border border-slate-700 p-4 rounded-2xl space-y-2">
+                            <h4 class="font-bold text-orange-400 text-sm">👤 Yaş Sınırı</h4>
+                            <p class="font-mono text-xs text-slate-300">Yaş = 18<br>EĞER Yaş >= 18 İSE<br>&nbsp;&nbsp;"Giriş yapabilir"<br>DEĞİLSE<br>&nbsp;&nbsp;"Giriş yapamaz"</p>
+                            <span class="text-xs bg-emerald-950 text-emerald-300 px-2 py-1 rounded border border-emerald-500/30 inline-block font-semibold">Sonuç: Giriş yapabilir</span>
+                        </div>
+                    </div>
+                    <button onclick="completeCurrentTask()" class="w-full bg-orange-600 hover:bg-orange-500 text-white font-black py-3 rounded-2xl shadow-lg transition-all text-base">Örnekleri İnceledim, Devam Et! 🚀</button>
+                </div>
+            `;
+        }
+
+        function renderTask5Main() {
+            const content = document.getElementById('taskContent');
+            content.innerHTML = `
+                <div class="space-y-4">
+                    <span class="bg-rose-500/20 text-rose-300 px-3 py-1 rounded-full text-xs font-bold border border-rose-500/30">GÖREV 5: ALGORİTMA DEDEKTİFİ</span>
+                    <h3 class="text-2xl font-extrabold text-white">Dedektif Bulmacaları</h3>
+                    <p class="text-slate-300 text-sm">Sözde kodun sonucunu tahmin et ve dedektif rozetini kazan!</p>
+                    
+                    <div class="bg-slate-900 border border-slate-700 p-5 rounded-2xl font-mono text-sm sm:text-base text-rose-300 whitespace-pre-line shadow-inner">
+                        BAŞLA
+
+                        Sayi = 25
+
+                        EĞER Sayi > 20 İSE
+                            Sonuc = 100
+                        DEĞİLSE
+                            Sonuc = 0
+
+                        Sonuc değerini yazdır.
+
+                        DUR.
+                    </div>
+                    
+                    <p class="font-bold text-white">Ekrana hangi değer yazdırılır?</p>
+                    
+                    <div class="grid grid-cols-2 sm:grid-cols-4 gap-3">
+                        <button onclick="checkTask5('0')" class="bg-slate-900 hover:bg-rose-600 border border-slate-700 p-4 rounded-2xl font-bold text-white text-center transition-all">A) 0</button>
+                        <button onclick="checkTask5('20')" class="bg-slate-900 hover:bg-rose-600 border border-slate-700 p-4 rounded-2xl font-bold text-white text-center transition-all">B) 20</button>
+                        <button onclick="checkTask5('25')" class="bg-slate-900 hover:bg-rose-600 border border-slate-700 p-4 rounded-2xl font-bold text-white text-center transition-all">C) 25</button>
+                        <button onclick="checkTask5('100')" class="bg-slate-900 hover:bg-rose-600 border border-slate-700 p-4 rounded-2xl font-bold text-white text-center transition-all">D) 100</button>
+                    </div>
+                </div>
+            `;
+        }
+
+        function checkTask5(ans) {
+            if (ans === '100') {
+                showFeedback("🎉 Tebrikler Dedektif! Sayi=25 olduğu için 25 > 20 koşulu DOĞRU'dur ve Sonuc = 100 olur.", true);
+                completeCurrentTask();
+            } else {
+                gameState.firstAttempt = false;
+                showFeedback("💡 Tekrar düşün. Sayı 25'tir ve 20'den büyüktür. Hangi dala girer?", false);
+            }
+        }
+
+        function renderCongratsScreen() {
+            const container = document.getElementById('taskContainer');
+            container.innerHTML = `
+                <div class="text-center space-y-6 py-8">
+                    <div class="text-6xl animate-bounce">🎉</div>
+                    <h3 class="text-3xl sm:text-4xl font-black text-white tracking-tight">TEBRİKLER!</h3>
+                    <p class="text-slate-300 max-w-lg mx-auto text-base">İTO Vakfı Süleyman Taştekin MTAL 9. Sınıf Programlama Temelleri dersi sözde kod modülünü başarıyla tamamladın!</p>
+                    
+                    <div class="bg-slate-900 border border-slate-700 p-6 rounded-3xl max-w-md mx-auto space-y-3 text-left shadow-xl">
+                        <h4 class="font-bold text-emerald-400 text-sm uppercase tracking-wider mb-2">Başarıyla Tamamlanan Kavramlar:</h4>
+                        <div class="grid grid-cols-1 gap-2 text-sm text-slate-200">
+                            <div class="flex items-center gap-2"><span>✅</span> Algoritma adımları ve sıralaması</div>
+                            <div class="flex items-center gap-2"><span>✅</span> Girdi, İşlem ve Çıktı kavramı</div>
+                            <div class="flex items-center gap-2"><span>✅</span> Değişken takip etme</div>
+                            <div class="flex items-center gap-2"><span>✅</span> Karşılaştırma operatörleri (==, >, < vb.)</div>
+                            <div class="flex items-center gap-2"><span>✅</span> DOĞRU / YANLIŞ sonuç değerlendirme</div>
+                            <div class="flex items-center gap-2"><span>✅</span> EĞER – DEĞİLSE karar yapıları</div>
+                        </div>
+                    </div>
+
+                    <div class="text-2xl font-black text-amber-400">Toplam Puanın: ${gameState.score} 🏆</div>
+
+                    <button onclick="location.reload()" class="bg-emerald-600 hover:bg-emerald-500 text-white font-black px-8 py-4 rounded-2xl shadow-lg transition-all text-lg">Oyunu Yeniden Başlat 🔄</button>
+                </div>
+            `;
+        }
+
+        // Sayfa yüklendiğinde menu durumunu güncelle
+        window.onload = function() {
+            updateMenuBadges();
+        };
+    </script>
+</body>
+</html>

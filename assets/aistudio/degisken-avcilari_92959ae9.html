@@ -1,0 +1,585 @@
+<!DOCTYPE html>
+<html lang="tr">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>Değişken Avcıları — Programlama Oyunu</title>
+<link rel="preconnect" href="https://fonts.googleapis.com">
+<link href="https://fonts.googleapis.com/css2?family=Baloo+2:wght@500;700;800&family=Nunito:wght@400;600;700;800&display=swap" rel="stylesheet">
+<style>
+  :root{
+    --bg-deep: #1c1a3a;
+    --bg-deep-2: #2a2760;
+    --panel: #ffffff;
+    --ink: #232145;
+    --ink-soft: #5b5880;
+    --sun: #ffc93c;
+    --coral: #ff6f59;
+    --mint: #38d9c9;
+    --lav: #a78bfa;
+    --ok: #38d996;
+    --bad: #ff5c7a;
+    --radius: 22px;
+    --shadow: 0 14px 32px rgba(20,15,60,0.35);
+  }
+  *{box-sizing:border-box;}
+  html,body{height:100%;}
+  body{
+    margin:0;
+    font-family:'Nunito', sans-serif;
+    color:var(--ink);
+    background:
+      radial-gradient(circle at 15% 10%, rgba(255,201,60,0.18), transparent 40%),
+      radial-gradient(circle at 85% 85%, rgba(56,217,201,0.16), transparent 45%),
+      linear-gradient(160deg, var(--bg-deep), var(--bg-deep-2));
+    min-height:100vh;
+    display:flex;
+    align-items:center;
+    justify-content:center;
+    padding:24px;
+    overflow-x:hidden;
+  }
+  h1,h2,h3,.display{font-family:'Baloo 2', sans-serif;}
+  .stage{
+    width:100%;
+    max-width:720px;
+    position:relative;
+  }
+  .card{
+    background:var(--panel);
+    border-radius:var(--radius);
+    box-shadow:var(--shadow);
+    padding:36px 32px;
+    position:relative;
+    overflow:hidden;
+    animation:pop .45s cubic-bezier(.2,1.4,.4,1);
+  }
+  @keyframes pop{
+    from{opacity:0; transform:translateY(18px) scale(.97);}
+    to{opacity:1; transform:translateY(0) scale(1);}
+  }
+  .card::before{
+    content:"";
+    position:absolute; top:-60px; right:-60px;
+    width:180px; height:180px; border-radius:50%;
+    background:radial-gradient(circle, rgba(255,201,60,0.35), transparent 70%);
+  }
+  .eyebrow{
+    display:inline-flex; align-items:center; gap:8px;
+    font-family:'Baloo 2', sans-serif;
+    font-weight:700; font-size:14px;
+    color:var(--coral);
+    background:#fff1ec;
+    padding:6px 14px; border-radius:999px;
+    margin-bottom:14px;
+  }
+  h1{font-size:34px; margin:0 0 8px; line-height:1.1;}
+  h2{font-size:24px; margin:0 0 6px;}
+  p{line-height:1.55; color:var(--ink-soft); font-size:16px;}
+  .btn{
+    font-family:'Baloo 2', sans-serif;
+    font-weight:700; font-size:17px;
+    border:none; border-radius:16px;
+    padding:14px 26px;
+    cursor:pointer;
+    color:#fff;
+    background:linear-gradient(135deg, var(--coral), #ff9166);
+    box-shadow:0 8px 18px rgba(255,111,89,0.35);
+    transition:transform .15s ease, box-shadow .15s ease;
+  }
+  .btn:hover{transform:translateY(-2px); box-shadow:0 12px 22px rgba(255,111,89,0.45);}
+  .btn:active{transform:translateY(0);}
+  .btn.secondary{
+    background:linear-gradient(135deg, var(--mint), #58e4d6);
+    box-shadow:0 8px 18px rgba(56,217,201,0.35);
+  }
+  .btn:disabled{opacity:.45; cursor:not-allowed; transform:none; box-shadow:none;}
+  input[type=text]{
+    font-family:'Nunito', sans-serif;
+    font-size:17px; font-weight:700;
+    padding:13px 16px; border-radius:14px;
+    border:2px solid #e7e4f7; width:100%;
+    outline:none; color:var(--ink);
+  }
+  input[type=text]:focus{border-color:var(--lav);}
+
+  /* Mascot box character */
+  .mascot{
+    width:78px; height:78px;
+    border-radius:18px;
+    background:linear-gradient(150deg, var(--sun), #ffb020);
+    display:flex; align-items:center; justify-content:center;
+    font-size:34px;
+    box-shadow:0 8px 16px rgba(255,180,20,0.4);
+    margin-bottom:6px;
+    transition:transform .25s ease;
+  }
+  .mascot.happy{animation:bounce .5s ease;}
+  .mascot.sad{animation:shake .4s ease; background:linear-gradient(150deg, #ffb3c1, var(--bad));}
+  @keyframes bounce{0%{transform:scale(1);}40%{transform:scale(1.18) rotate(-4deg);}100%{transform:scale(1);}}
+  @keyframes shake{0%,100%{transform:translateX(0);}25%{transform:translateX(-6px);}75%{transform:translateX(6px);}}
+
+  /* Level select */
+  .levels{display:flex; gap:14px; flex-wrap:wrap; margin-top:20px;}
+  .level-pill{
+    flex:1; min-width:150px;
+    border-radius:18px;
+    padding:18px;
+    background:#f6f5ff;
+    border:2px solid #ece9ff;
+    text-align:left;
+  }
+  .level-pill .num{
+    font-family:'Baloo 2'; font-weight:800; font-size:26px;
+    color:var(--lav);
+  }
+  .level-pill.locked{opacity:.5;}
+  .level-pill .stars{font-size:15px; margin-top:4px;}
+
+  /* progress */
+  .progress-row{display:flex; align-items:center; gap:10px; margin-bottom:20px;}
+  .progress-track{
+    flex:1; height:10px; border-radius:999px; background:#eeecfb; overflow:hidden;
+  }
+  .progress-fill{
+    height:100%; border-radius:999px;
+    background:linear-gradient(90deg, var(--mint), var(--lav));
+    transition:width .4s ease;
+  }
+  .progress-label{font-family:'Baloo 2'; font-weight:700; font-size:14px; color:var(--ink-soft); white-space:nowrap;}
+
+  .code{
+    font-family:'Consolas', 'Menlo', monospace;
+    background:#1c1a3a; color:#f4f2ff;
+    border-radius:14px; padding:16px 18px;
+    font-size:17px; margin:16px 0; line-height:1.7;
+    box-shadow: inset 0 0 0 1px rgba(255,255,255,0.06);
+  }
+  .code .kw{color:var(--sun);}
+  .code .str{color:#8de8b8;}
+  .code .num{color:#8ec9ff;}
+
+  .options{display:flex; flex-direction:column; gap:12px; margin-top:18px;}
+  .opt{
+    text-align:left;
+    border:2px solid #e7e4f7; background:#fff;
+    border-radius:14px; padding:14px 16px;
+    font-family:'Nunito'; font-weight:700; font-size:16px;
+    cursor:pointer; color:var(--ink);
+    transition:all .15s ease;
+    display:flex; align-items:center; gap:12px;
+  }
+  .opt:hover{border-color:var(--lav); background:#f8f7ff;}
+  .opt.correct{background:#e9fbf3; border-color:var(--ok); color:#0e7a52;}
+  .opt.wrong{background:#ffedf1; border-color:var(--bad); color:#b3143c;}
+  .opt .letter{
+    width:28px; height:28px; border-radius:8px; background:#ece9ff;
+    display:flex; align-items:center; justify-content:center;
+    font-family:'Baloo 2'; font-weight:800; font-size:14px; color:var(--lav);
+    flex-shrink:0;
+  }
+  .opt.correct .letter{background:var(--ok); color:#fff;}
+  .opt.wrong .letter{background:var(--bad); color:#fff;}
+
+  .feedback{
+    margin-top:16px; padding:14px 16px; border-radius:14px;
+    font-weight:700; font-size:15px; display:none;
+  }
+  .feedback.show{display:block; animation:pop .3s ease;}
+  .feedback.ok{background:#e9fbf3; color:#0e7a52;}
+  .feedback.bad{background:#ffedf1; color:#b3143c;}
+
+  .footer-row{display:flex; justify-content:space-between; align-items:center; margin-top:22px;}
+
+  .stars-row{font-size:30px; letter-spacing:6px; margin:14px 0;}
+
+  .badge-grid{display:flex; gap:16px; margin-top:18px; flex-wrap:wrap;}
+  .badge{
+    flex:1; min-width:140px; text-align:center;
+    background:#f6f5ff; border-radius:16px; padding:16px;
+  }
+  .badge .icon{font-size:30px;}
+  .badge .title{font-family:'Baloo 2'; font-weight:700; font-size:14px; margin-top:4px;}
+
+  .hidden{display:none !important;}
+
+  .certificate{
+    text-align:center;
+    border:3px dashed var(--sun);
+    border-radius:18px;
+    padding:30px 20px;
+    background:linear-gradient(160deg, #fffdf6, #fff9ea);
+  }
+  .certificate h2{font-size:22px; color:var(--ink-soft); font-weight:700; margin-bottom:4px;}
+  .certificate .name{
+    font-family:'Baloo 2'; font-weight:800; font-size:30px; color:var(--coral); margin:10px 0;
+  }
+  .certificate .title{font-family:'Baloo 2'; font-weight:800; font-size:20px; color:var(--ink); margin-top:6px;}
+  .certificate .trophy{font-size:56px; margin-bottom:6px;}
+
+  @media (max-width:520px){
+    .card{padding:26px 20px;}
+    h1{font-size:27px;}
+    .levels{flex-direction:column;}
+  }
+</style>
+</head>
+<body>
+
+<div class="stage">
+  <div class="card" id="cardRoot"></div>
+</div>
+
+<script>
+/* ---------------- Data: 3 levels x 5 questions ---------------- */
+const LEVELS = [
+  {
+    title: "Seviye 1: Kutu Ustası",
+    subtitle: "Değişken ne demektir, öğrenelim!",
+    icon: "📦",
+    color: "var(--sun)",
+    questions: [
+      {
+        q: "Bir değişken aslında nedir?",
+        code: null,
+        options: ["Bilgiyi içinde saklayan etiketli bir kutu", "Bir oyun karakteri", "Bir yazıcı çeşidi", "Bir internet sitesi"],
+        correct: 0,
+        explain: "Doğru! Değişken, bir bilgiyi (değeri) sakladığımız, adı olan bir kutu gibidir."
+      },
+      {
+        q: "Aşağıdaki kodda değişkenin adı nedir?",
+        code: "isim<span class='kw'> = </span><span class='str'>\"Ayşe\"</span>",
+        options: ["isim", "Ayşe", "=", "Hiçbiri"],
+        correct: 0,
+        explain: "Evet! Eşittirin solundaki kelime, kutunun üzerindeki etiket yani değişkenin adıdır."
+      },
+      {
+        q: "Aşağıdaki kodda değişkenin değeri nedir?",
+        code: "yas<span class='kw'> = </span><span class='num'>10</span>",
+        options: ["yas", "=", "10", "yas10"],
+        correct: 2,
+        explain: "Aynen öyle! Kutunun içindeki bilgi, yani 10, değişkenin değeridir."
+      },
+      {
+        q: "Hangisi geçerli (doğru yazılmış) bir değişken ismidir?",
+        code: null,
+        options: ["2sayi", "öğrenci sayı", "ogrenci_sayisi", "sayı!"],
+        correct: 2,
+        explain: "Doğru! Değişken isimleri rakamla başlayamaz, boşluk ve özel karakter içeremez."
+      },
+      {
+        q: "puan = 100 yazılır, sonra puan = 150 yazılırsa, puan'ın son değeri kaç olur?",
+        code: "puan<span class='kw'> = </span><span class='num'>100</span><br>puan<span class='kw'> = </span><span class='num'>150</span>",
+        options: ["100", "150", "250", "0"],
+        correct: 1,
+        explain: "Bravo! Bir değişkene yeni bir değer verildiğinde, eski değer unutulur ve yenisi kutuya yerleşir."
+      }
+    ]
+  },
+  {
+    title: "Seviye 2: Veri Tipi Kâşifi",
+    subtitle: "Kutunun içindeki bilginin türünü keşfedelim!",
+    icon: "🧭",
+    color: "var(--mint)",
+    questions: [
+      {
+        q: "\"Merhaba\" değeri hangi veri tipindedir?",
+        code: null,
+        options: ["Metin (string)", "Tam sayı (integer)", "Mantıksal (boolean)", "Ondalıklı sayı (float)"],
+        correct: 0,
+        explain: "Doğru! Tırnak içindeki yazılar metin (string) tipindedir."
+      },
+      {
+        q: "3.14 değeri hangi veri tipindedir?",
+        code: null,
+        options: ["Tam sayı", "Ondalıklı sayı (float)", "Metin", "Mantıksal"],
+        correct: 1,
+        explain: "Evet! Virgüllü (noktalı) sayılara ondalıklı sayı yani float denir."
+      },
+      {
+        q: "Doğru ya da Yanlış (True / False) değerleri hangi veri tipidir?",
+        code: null,
+        options: ["Metin", "Tam sayı", "Mantıksal (boolean)", "Ondalıklı sayı"],
+        correct: 2,
+        explain: "Bravo! Sadece doğru/yanlış (evet/hayır) değeri tutan tipe mantıksal yani boolean denir."
+      },
+      {
+        q: "25 değeri hangi veri tipindedir?",
+        code: null,
+        options: ["Tam sayı (integer)", "Metin", "Mantıksal", "Ondalıklı sayı"],
+        correct: 0,
+        explain: "Doğru! Virgülsüz, tam sayılara integer denir."
+      },
+      {
+        q: "Bir değişkene değer atarken hangisi doğru yazımdır?",
+        code: null,
+        options: ["yas == 12", "12 = yas", "yas = 12", "yas -> 12"],
+        correct: 2,
+        explain: "Aynen öyle! Atama işlemi tek eşittir (=) ile yapılır: önce değişken adı, sonra değeri."
+      }
+    ]
+  },
+  {
+    title: "Seviye 3: Kod Kâşifi",
+    subtitle: "Artık gerçek bir programcı gibi kodu takip edelim!",
+    icon: "🚀",
+    color: "var(--lav)",
+    questions: [
+      {
+        q: "Kod çalıştıktan sonra a değişkeninin değeri kaç olur?",
+        code: "a<span class='kw'> = </span><span class='num'>5</span><br>b<span class='kw'> = </span><span class='num'>3</span><br>a<span class='kw'> = </span>a<span class='kw'> + </span>b",
+        options: ["5", "3", "8", "0"],
+        correct: 2,
+        explain: "Harika! a + b işlemi 5 + 3 = 8 sonucunu verir ve bu yeni değer a'nın içine yazılır."
+      },
+      {
+        q: "Kod çalıştıktan sonra y değişkeninin değeri kaç olur?",
+        code: "x<span class='kw'> = </span><span class='num'>10</span><br>y<span class='kw'> = </span>x<br>x<span class='kw'> = </span><span class='num'>20</span>",
+        options: ["10", "20", "0", "30"],
+        correct: 0,
+        explain: "Dikkatli düşündün! y, x'in o anki değeri olan 10'u kopyaladı. x sonradan değişse bile y hâlâ 10'dur."
+      },
+      {
+        q: "Kod çalıştıktan sonra isim değişkeninin değeri ne olur?",
+        code: "isim<span class='kw'> = </span><span class='str'>\"Ali\"</span><br>isim<span class='kw'> = </span>isim<span class='kw'> + </span><span class='str'>\" Veli\"</span>",
+        options: ["\"Ali\"", "\"Veli\"", "\"Ali Veli\"", "Hata verir"],
+        correct: 2,
+        explain: "Süper! Metinleri + ile birleştirebiliriz. Sonuç \"Ali Veli\" olur ve isim değişkenine yazılır."
+      },
+      {
+        q: "sayac = 0 ile başlıyor ve sayac = sayac + 1 satırı 3 kez çalışıyor. Son değer kaç olur?",
+        code: "sayac<span class='kw'> = </span><span class='num'>0</span><br><span class='kw'>// 3 kez tekrar:</span><br>sayac<span class='kw'> = </span>sayac<span class='kw'> + </span><span class='num'>1</span>",
+        options: ["0", "1", "3", "4"],
+        correct: 2,
+        explain: "Bravo, sayaç mantığını çözdün! 0'dan başlayıp 3 kez 1 arttığı için sonuç 3 olur."
+      },
+      {
+        q: "Bu kod satırlarından hangisinde hata vardır?",
+        code: "isim<span class='kw'> = </span><span class='str'>\"Zeynep\"</span><br><span style='color:#ff9db3'>2yas = 12</span><br>boy<span class='kw'> = </span><span class='num'>1.55</span>",
+        options: ["1. satır (isim)", "2. satır (2yas)", "3. satır (boy)", "Hiçbirinde hata yok"],
+        correct: 1,
+        explain: "Tam isabet! Değişken isimleri rakamla başlayamaz, bu yüzden '2yas' geçersizdir."
+      }
+    ]
+  }
+];
+
+/* ---------------- State ---------------- */
+let state = {
+  screen: "start",
+  playerName: "",
+  levelIndex: 0,
+  qIndex: 0,
+  correctCount: 0,
+  levelStars: [0,0,0],
+  answered: false
+};
+
+const root = document.getElementById('cardRoot');
+
+/* ---------------- Renderers ---------------- */
+function render(){
+  if(state.screen === "start") return renderStart();
+  if(state.screen === "map") return renderMap();
+  if(state.screen === "quiz") return renderQuiz();
+  if(state.screen === "levelResult") return renderLevelResult();
+  if(state.screen === "finalCert") return renderFinalCert();
+}
+
+function renderStart(){
+  root.innerHTML = `
+    <div class="mascot happy">📦</div>
+    <span class="eyebrow">🎮 Programlama Oyunu</span>
+    <h1>Değişken Avcıları</h1>
+    <p>Merhaba kâşif! Bu oyunda değişkenleri, veri tiplerini ve kodun içinde neler olduğunu öğrenerek <b>3 seviye</b> boyunca ilerleyeceksin. Her seviyede 5 soru var. Hazırsan adını yaz ve maceraya başla!</p>
+    <div style="margin:20px 0;">
+      <input type="text" id="nameInput" placeholder="Adın ne kâşif?" maxlength="20" value="${state.playerName}">
+    </div>
+    <button class="btn" id="startBtn">Maceraya Başla 🚀</button>
+  `;
+  document.getElementById('startBtn').onclick = () => {
+    const val = document.getElementById('nameInput').value.trim();
+    state.playerName = val || "Kâşif";
+    state.screen = "map";
+    render();
+  };
+  document.getElementById('nameInput').addEventListener('keydown', e=>{
+    if(e.key === "Enter") document.getElementById('startBtn').click();
+  });
+}
+
+function renderMap(){
+  const pills = LEVELS.map((lvl, i) => {
+    const locked = i > 0 && state.levelStars[i-1] === 0;
+    const stars = state.levelStars[i];
+    const starStr = stars > 0 ? "⭐".repeat(stars) + "☆".repeat(3-stars) : "☆☆☆";
+    return `
+      <div class="level-pill ${locked ? 'locked' : ''}" data-level="${i}" style="cursor:${locked?'not-allowed':'pointer'}">
+        <div style="font-size:26px;">${lvl.icon}</div>
+        <div class="num">Seviye ${i+1}</div>
+        <div style="font-weight:700; font-size:14px; color:var(--ink-soft); margin-top:2px;">${lvl.title.split(': ')[1]}</div>
+        <div class="stars">${starStr}</div>
+      </div>
+    `;
+  }).join('');
+
+  root.innerHTML = `
+    <span class="eyebrow">👋 Hoş geldin, ${state.playerName}!</span>
+    <h1>Seviyeni Seç</h1>
+    <p>Her seviyeyi tamamladıkça bir sonraki açılır. Doğru cevaplarla yıldız topla!</p>
+    <div class="levels">${pills}</div>
+  `;
+  root.querySelectorAll('.level-pill').forEach(el=>{
+    const i = parseInt(el.dataset.level);
+    const locked = i > 0 && state.levelStars[i-1] === 0;
+    if(!locked){
+      el.onclick = () => {
+        state.levelIndex = i;
+        state.qIndex = 0;
+        state.correctCount = 0;
+        state.screen = "quiz";
+        render();
+      };
+    }
+  });
+}
+
+function renderQuiz(){
+  const level = LEVELS[state.levelIndex];
+  const q = level.questions[state.qIndex];
+  state.answered = false;
+
+  const optionsHtml = q.options.map((opt, i) => `
+    <button class="opt" data-i="${i}">
+      <span class="letter">${String.fromCharCode(65+i)}</span>
+      <span>${opt}</span>
+    </button>
+  `).join('');
+
+  root.innerHTML = `
+    <div class="progress-row">
+      <span class="progress-label">${level.icon} Seviye ${state.levelIndex+1} · Soru ${state.qIndex+1}/5</span>
+    </div>
+    <div class="progress-track"><div class="progress-fill" style="width:${(state.qIndex/5)*100}%"></div></div>
+    <h2 style="margin-top:22px;">${q.q}</h2>
+    ${q.code ? `<div class="code">${q.code}</div>` : ""}
+    <div class="options">${optionsHtml}</div>
+    <div class="feedback" id="feedbackBox"></div>
+    <div class="footer-row">
+      <div class="mascot" id="mascotEl">📦</div>
+      <button class="btn secondary hidden" id="nextBtn">Devam Et →</button>
+    </div>
+  `;
+
+  root.querySelectorAll('.opt').forEach(btn=>{
+    btn.onclick = () => {
+      if(state.answered) return;
+      state.answered = true;
+      const i = parseInt(btn.dataset.i);
+      const opts = root.querySelectorAll('.opt');
+      const mascot = document.getElementById('mascotEl');
+      const fb = document.getElementById('feedbackBox');
+
+      if(i === q.correct){
+        btn.classList.add('correct');
+        state.correctCount++;
+        mascot.classList.add('happy');
+        mascot.textContent = "🎉";
+        fb.classList.add('show','ok');
+        fb.textContent = "✅ Doğru! " + q.explain;
+      } else {
+        btn.classList.add('wrong');
+        opts[q.correct].classList.add('correct');
+        mascot.classList.add('sad');
+        mascot.textContent = "😅";
+        fb.classList.add('show','bad');
+        fb.textContent = "❌ Doğru cevap: \"" + q.options[q.correct] + "\". " + q.explain;
+      }
+      opts.forEach(o => o.style.cursor = "default");
+      document.getElementById('nextBtn').classList.remove('hidden');
+    };
+  });
+
+  document.getElementById('nextBtn').onclick = () => {
+    if(state.qIndex < 4){
+      state.qIndex++;
+      render();
+    } else {
+      const stars = state.correctCount === 5 ? 3 : state.correctCount >= 3 ? 2 : 1;
+      state.levelStars[state.levelIndex] = Math.max(state.levelStars[state.levelIndex], stars);
+      state.screen = "levelResult";
+      render();
+    }
+  };
+}
+
+function renderLevelResult(){
+  const level = LEVELS[state.levelIndex];
+  const stars = state.levelStars[state.levelIndex];
+  const isLast = state.levelIndex === LEVELS.length - 1;
+  const allDone = state.levelStars.every(s => s > 0) && isLast;
+
+  root.innerHTML = `
+    <div class="mascot happy" style="font-size:40px;">🏆</div>
+    <span class="eyebrow">${level.icon} ${level.title} tamamlandı!</span>
+    <h1>${state.correctCount}/5 doğru!</h1>
+    <div class="stars-row">${"⭐".repeat(stars)}${"☆".repeat(3-stars)}</div>
+    <p>${stars===3 ? "Muhteşem! Bu seviyeyi mükemmel tamamladın." : stars===2 ? "Çok iyi gidiyorsun, birkaç soruyu tekrar gözden geçirebilirsin." : "Fena değil! İstersen tekrar deneyip yıldızını artırabilirsin."}</p>
+    <div class="footer-row">
+      <button class="btn secondary" id="retryBtn">Tekrar Dene 🔁</button>
+      <button class="btn" id="continueBtn">${isLast ? "Bitir 🏁" : "Sıradaki Seviye →"}</button>
+    </div>
+  `;
+
+  document.getElementById('retryBtn').onclick = () => {
+    state.qIndex = 0;
+    state.correctCount = 0;
+    state.screen = "quiz";
+    render();
+  };
+  document.getElementById('continueBtn').onclick = () => {
+    if(isLast){
+      state.screen = "finalCert";
+    } else {
+      state.levelIndex++;
+      state.qIndex = 0;
+      state.correctCount = 0;
+      state.screen = "quiz";
+    }
+    render();
+  };
+}
+
+function renderFinalCert(){
+  const totalStars = state.levelStars.reduce((a,b)=>a+b,0);
+  root.innerHTML = `
+    <div class="certificate">
+      <div class="trophy">🏆</div>
+      <h2>Başarı Belgesi</h2>
+      <div class="name">${state.playerName}</div>
+      <p style="margin:0;">3 seviyeyi de tamamladı ve</p>
+      <div class="title">DEĞİŞKEN USTASI ⭐ oldu!</div>
+      <div class="stars-row" style="margin-top:14px;">${"⭐".repeat(totalStars)}${"☆".repeat(9-totalStars)}</div>
+      <p style="margin-top:10px; font-size:14px;">Toplam ${totalStars}/9 yıldız topladın.</p>
+    </div>
+    <div class="badge-grid">
+      <div class="badge"><div class="icon">📦</div><div class="title">Değişken<br>tanır</div></div>
+      <div class="badge"><div class="icon">🧭</div><div class="title">Veri tiplerini<br>bilir</div></div>
+      <div class="badge"><div class="icon">🚀</div><div class="title">Kodu takip<br>edebilir</div></div>
+    </div>
+    <div class="footer-row">
+      <button class="btn secondary" id="mapBtn">Haritaya Dön 🗺️</button>
+      <button class="btn" id="restartBtn">Baştan Başla 🔄</button>
+    </div>
+  `;
+  document.getElementById('mapBtn').onclick = () => { state.screen = "map"; render(); };
+  document.getElementById('restartBtn').onclick = () => {
+    state = { screen:"start", playerName:"", levelIndex:0, qIndex:0, correctCount:0, levelStars:[0,0,0], answered:false };
+    render();
+  };
+}
+
+render();
+</script>
+</body>
+</html>
